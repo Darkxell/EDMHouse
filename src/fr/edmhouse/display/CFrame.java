@@ -60,7 +60,10 @@ public class CFrame {
 		if (canvas.isonskip) {
 		    EDMHouse.bgmthread.resume();
 		    EDMHouse.BGM.instantstop();
-		    EDMHouse.BGM.changemusic(EDMHouse.songs.getRandomUrl());
+		    if (canvas.random_on)
+			EDMHouse.BGM.changemusic(EDMHouse.songs.getRandomUrl());
+		    else 
+			EDMHouse.BGM.changemusic(EDMHouse.songs.getNextUrl());
 		    if (canvas.state) 
 			EDMHouse.bgmthread.suspend();
 		}

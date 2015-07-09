@@ -38,7 +38,10 @@ public class BackgroundMusic implements Runnable {
 	    try {
 		if (this.currentplayer.isComplete()) {
 		    this.currentplayer.close();
-		    this.changemusic(EDMHouse.songs.getRandomUrl());
+		    if (EDMHouse.frame.canvas.random_on)
+			this.changemusic(EDMHouse.songs.getRandomUrl());
+		    else 
+			this.changemusic(EDMHouse.songs.getNextUrl());
 		}
 		this.currentplayer.play();
 	    } catch (Exception e) {

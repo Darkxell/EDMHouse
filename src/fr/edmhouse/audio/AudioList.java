@@ -34,7 +34,7 @@ public class AudioList {
      */
     public Song getRandomUrl() {
 	int rand = (int) (Math.random() * this.songs.length);
-	while(rand == this.lastindex)
+	while (rand == this.lastindex)
 	    rand = (int) (Math.random() * this.songs.length);
 	this.lastindex = rand;
 	return this.songs[rand];
@@ -42,8 +42,14 @@ public class AudioList {
 
     /** Gets the next mp3 file url from the list. */
     public Song getNextUrl() {
-	this.lastindex++;
-	return this.songs[this.lastindex];
+	try {
+	    this.lastindex++;
+	    return this.songs[this.lastindex];
+	} catch (Exception e) {
+	    this.lastindex = 0;
+	    return this.songs[0];
+	}
+
     }
 
 }
