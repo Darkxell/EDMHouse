@@ -49,7 +49,18 @@ public class AudioList {
 	    this.lastindex = 0;
 	    return this.songs[0];
 	}
-
     }
 
+    /** Gets the number of songs in the list */
+    public int getSongAmmount() {
+	return this.songs.length;
+    }
+
+    /**
+     * Gets a song from it's ID. Only gets the song, the Audiolist don't record
+     * the information given away. Intended for display only.
+     */
+    public Song getSongById(int id) {
+	return this.songs[id];
+    }
 }

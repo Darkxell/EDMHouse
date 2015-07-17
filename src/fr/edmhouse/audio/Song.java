@@ -12,7 +12,7 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 
 public class Song {
 
-    /** The filepath to the .mp3 file */
+    /** The absolute filepath to the .mp3 file */
     private String filepath;
     private String displayname;
     private String name = null;
@@ -23,7 +23,6 @@ public class Song {
     /** Constructs a Song object from a .mp3 filepath. */
     public Song(String path) {
 	this.filepath = path;
-
 	AudioFileFormat baseFileFormat;
 	try {
 	    baseFileFormat = new MpegAudioFileReader()
@@ -48,6 +47,10 @@ public class Song {
 	return this.filepath;
     }
 
+    /**
+     * Returns the displayname of the song. Usually Artist - Name , but just the
+     * name of the mp3 file if not specified.
+     */
     public String getdipsplayname() {
 	return this.displayname;
     }

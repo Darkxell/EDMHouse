@@ -4,15 +4,23 @@ import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 
 import fr.edmhouse.main.EDMHouse;
-import fr.edmhouse.res.CustomList;
+import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Res;
 
 public class CFrame {
 
+    /**
+     * The velocity of current scrolling on the mousewheel. Shrinks down to zero
+     * automaticly and is auto increased or decreased if the mouse wheel is
+     * rolled. Can be negative.
+     */
+    public double wheelvelocity;
     /**
      * The x positon of the mouse on the frame. is 0 if the mouse is not inside.
      */
@@ -21,6 +29,7 @@ public class CFrame {
      * The y positon of the mouse on the frame. is 0 if the mouse is not inside.
      */
     private int iy;
+    /** The Jframe object used to display stuff. Should be left untouched. */
     private JFrame frame;
     public CCanvas canvas;
 
@@ -33,14 +42,14 @@ public class CFrame {
 	this.frame.setResizable(false);
 	this.frame.setUndecorated(true);
 	this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.frame.setSize(CustomList.size_frame_width,
-		CustomList.size_frame_height);
+	this.frame.setSize(Layout_common.size_frame_width,
+		Layout_common.size_frame_height);
 	this.frame.setLocationRelativeTo(null);
 	this.frame.setIconImage(Res.icon);
 	this.frame.setTitle("EDMhouse");
 	this.canvas = new CCanvas();
-	this.canvas.setSize(CustomList.size_frame_width,
-		CustomList.size_frame_height);
+	this.canvas.setSize(Layout_common.size_frame_width,
+		Layout_common.size_frame_height);
 	this.frame.add(this.canvas);
 	this.canvas.addMouseListener(new MouseListener() {
 	    @SuppressWarnings("deprecation")
@@ -50,7 +59,7 @@ public class CFrame {
 		    System.exit(0);
 		if (canvas.isonmini)
 		    frame.setState(Frame.ICONIFIED);
-		if (canvas.isonbutton) {
+		if (canvas.isonbutton && canvas.content == 0) {
 		    canvas.state = !canvas.state;
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
@@ -62,13 +71,18 @@ public class CFrame {
 		    EDMHouse.BGM.instantstop();
 		    if (canvas.random_on)
 			EDMHouse.BGM.changemusic(EDMHouse.songs.getRandomUrl());
-		    else 
+		    else
 			EDMHouse.BGM.changemusic(EDMHouse.songs.getNextUrl());
-		    if (canvas.state) 
+		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
 		}
 		if (canvas.isonrandom)
-		    canvas.random_on = !canvas.random_on ;
+		    canvas.random_on = !canvas.random_on;
+		if (canvas.isonlist)
+		    if (canvas.content == 0)
+			canvas.content = 1;
+		    else
+			canvas.content = 0;
 	    }
 
 	    @Override
@@ -103,36 +117,49 @@ public class CFrame {
 		frame.setLocation(xs - ix, ys - iy);
 	    }
 	});
+	this.canvas.addMouseWheelListener(new MouseWheelListener() {
+	    @Override
+	    public void mouseWheelMoved(MouseWheelEvent e) {
+		wheelvelocity += e.getPreciseWheelRotation() * 10;
+		// TODO : add this to a layout.edm file?
+	    }
+	});
 	this.canvas.initialize();
 	this.frame.setVisible(true);
 	this.canvas.createBufferStrategy(3);
     }
 
     public void update() {
-	this.canvas.isonrandom = this.isOnPos(CustomList.pos_random_x,
-		CustomList.pos_random_y, CustomList.pos_random_x
-			+ Res.hud_random.getWidth(), CustomList.pos_random_y
+	if (Math.abs(this.wheelvelocity) > 0.1)
+	    this.wheelvelocity = wheelvelocity / 1.1;
+	else
+	    this.wheelvelocity = 0;
+	// TODO : change the wheelvelocity decreasement to something fixed in
+	// time? or perhaps make it customisable in the layout.edm file?
+	this.canvas.isonrandom = this.isOnPos(Layout_common.pos_random_x,
+		Layout_common.pos_random_y, Layout_common.pos_random_x
+			+ Res.hud_random.getWidth(), Layout_common.pos_random_y
 			+ Res.hud_random.getHeight());
-	this.canvas.isonlist = this.isOnPos(CustomList.pos_list_x,
-		CustomList.pos_list_y, CustomList.pos_list_x
-			+ Res.hud_list.getWidth(), CustomList.pos_list_y
+	this.canvas.isonlist = this.isOnPos(Layout_common.pos_list_x,
+		Layout_common.pos_list_y, Layout_common.pos_list_x
+			+ Res.hud_list.getWidth(), Layout_common.pos_list_y
 			+ Res.hud_list.getHeight());
-	this.canvas.isonskip = this.isOnPos(CustomList.pos_skip_x,
-		CustomList.pos_skip_y, CustomList.pos_skip_x
-			+ Res.hud_skip.getWidth(), CustomList.pos_skip_y
+	this.canvas.isonskip = this.isOnPos(Layout_common.pos_skip_x,
+		Layout_common.pos_skip_y, Layout_common.pos_skip_x
+			+ Res.hud_skip.getWidth(), Layout_common.pos_skip_y
 			+ Res.hud_skip.getHeight());
-	this.canvas.isonclose = this.isOnPos(CustomList.pos_close_x,
-		CustomList.pos_close_y, CustomList.pos_close_x
+	this.canvas.isonclose = this.isOnPos(Layout_common.pos_close_x,
+		Layout_common.pos_close_y, Layout_common.pos_close_x
 			+ Res.hud_cross_white.getWidth(),
-		CustomList.pos_close_y + Res.hud_cross_white.getHeight());
-	this.canvas.isonmini = this.isOnPos(CustomList.pos_mini_x,
-		CustomList.pos_mini_y, CustomList.pos_mini_x
-			+ Res.hud_mini_white.getWidth(), CustomList.pos_mini_y
-			+ Res.hud_mini_white.getHeight());
-	this.canvas.isonbutton = this.isOnPos(CustomList.pos_button_x,
-		CustomList.pos_button_y,
-		CustomList.pos_button_x + Res.hud_play.getWidth(),
-		CustomList.pos_button_y + Res.hud_play.getHeight());
+		Layout_common.pos_close_y + Res.hud_cross_white.getHeight());
+	this.canvas.isonmini = this.isOnPos(Layout_common.pos_mini_x,
+		Layout_common.pos_mini_y, Layout_common.pos_mini_x
+			+ Res.hud_mini_white.getWidth(),
+		Layout_common.pos_mini_y + Res.hud_mini_white.getHeight());
+	this.canvas.isonbutton = this.isOnPos(Layout_common.pos_button_x,
+		Layout_common.pos_button_y, Layout_common.pos_button_x
+			+ Res.hud_play.getWidth(), Layout_common.pos_button_y
+			+ Res.hud_play.getHeight());
 	this.canvas.update(this.canvas.getGraphics());
     }
 

@@ -3,26 +3,32 @@ package fr.edmhouse.main;
 import fr.edmhouse.audio.AudioList;
 import fr.edmhouse.audio.BackgroundMusic;
 import fr.edmhouse.display.CFrame;
-import fr.edmhouse.res.CustomList;
+import fr.edmhouse.res.Layout_common;
+import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Res;
 
 public class EDMHouse {
 
-    /**The audio reader object.*/
+    /** The audio reader object. */
     public static BackgroundMusic BGM;
-    /**The list of songs in the folder.*/
+    /**
+     * The list of songs in the folder. Can be changed at any time without
+     * interrupting the current audio playing.
+     */
     public static AudioList songs;
-    /**The frame object.*/
+    /** The frame object. */
     public static CFrame frame;
-
+    /** The thread containing the audio player */
     public static Thread bgmthread;
 
     /** Main method. */
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
 	songs = new AudioList(Res.FOLDER_PATH + "songs");
-	CustomList.initializeFromFile(Res.FOLDER_PATH
-		+ "ressources\\layout.edm");
+	Layout_common.initializeFromFile(Res.FOLDER_PATH
+		+ "ressources\\common\\layout.edm");
+	Layout_list.initializeFromFile(Res.FOLDER_PATH
+		+ "ressources\\list\\layout.edm");
 	Res.initialize();
 	frame = new CFrame();
 	BGM = new BackgroundMusic();
@@ -31,8 +37,15 @@ public class EDMHouse {
 	bgmthread.start();
 	t.suspend();
 	while (true) {
-	    frame.update();
-	    wait(0.01f);
+	    try {
+		frame.update();
+		wait(0.01f);
+	    } catch (Exception e) {
+		Crashframe cf = new Crashframe("Internal error.",
+			"Sorry, an internal error happened. Error :"
+				+ e.toString());
+		cf.launch();
+	    }
 	}
 
     }

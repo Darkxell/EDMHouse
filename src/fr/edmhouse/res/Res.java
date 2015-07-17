@@ -6,6 +6,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import fr.edmhouse.main.Crashframe;
+
 /**
  * Static class that holds ressources as Java objects for font and images. Make
  * sure to initialize it before using it.
@@ -37,22 +39,35 @@ public class Res {
     public static BufferedImage hud_random_on_active;
     public static BufferedImage hud_list;
     public static BufferedImage hud_list_active;
+
     public static BufferedImage hud_play;
     public static BufferedImage hud_pause;
     public static BufferedImage hud_play_active;
     public static BufferedImage hud_pause_active;
 
+    /* The images used in the list */
+    public static BufferedImage list_play;
+    public static BufferedImage list_play_active;
+    public static BufferedImage list_componnent;
+    public static BufferedImage list_background;
+    public static BufferedImage list_foreground;
+
+    /** Initializes all the images and the font from the ressources folder. */
     public static void initialize() {
 	try {
-	    font = FontBuilder.createfont(FOLDER_PATH + "ressources\\font.otf");
-	    font = font.deriveFont(CustomList.size_text);
+	    try {
+		font = FontBuilder.createfont(FOLDER_PATH
+			+ "ressources\\font.otf");
+	    } catch (Exception e) {
+		font = FontBuilder.createfont(FOLDER_PATH
+			+ "ressources\\font.ttf");
+	    }
+	    font = font.deriveFont(Layout_common.size_text);
 	    icon = ImageIO.read(new File(FOLDER_PATH + "ressources\\icon.png"));
-
 	    background = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\background.png"));
+		    + "ressources\\common\\background.png"));
 	    foreground = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\foreground.png"));
-
+		    + "ressources\\common\\foreground.png"));
 	    hud_cross_red = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\cross_red.png"));
 	    hud_cross_white = ImageIO.read(new File(FOLDER_PATH
@@ -62,13 +77,13 @@ public class Res {
 	    hud_mini_white = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\mini_white.png"));
 	    hud_play = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\hud_play.png"));
+		    + "ressources\\common\\hud_play.png"));
 	    hud_pause = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\hud_pause.png"));
+		    + "ressources\\common\\hud_pause.png"));
 	    hud_play_active = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\hud_play_active.png"));
+		    + "ressources\\common\\hud_play_active.png"));
 	    hud_pause_active = ImageIO.read(new File(FOLDER_PATH
-		    + "ressources\\hud_pause_active.png"));
+		    + "ressources\\common\\hud_pause_active.png"));
 	    hud_random = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\random_white.png"));
 	    hud_random_active = ImageIO.read(new File(FOLDER_PATH
@@ -85,9 +100,30 @@ public class Res {
 		    + "ressources\\skip_white.png"));
 	    hud_skip_active = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\skip_grey.png"));
+
+	    /* list starts here */
+
+	    list_play = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\list\\play.png"));
+	    list_play_active = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\list\\play_active.png"));
+	    list_componnent = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\list\\container.png"));
+	    list_background = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\list\\background.png"));
+	    list_foreground = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\list\\foreground.png"));
+	    ;
 	} catch (Exception e) {
-	    System.err.println("Ressources haven't been successfuly loaded.");
-	    e.printStackTrace();
+	    Crashframe cf = new Crashframe(
+		    "Ressource error.",
+		    "Sorry, an error happened while loading ressources."
+			    + " Make sure that all the ressources are in "
+			    + "the \"ressources\" folder next to the .jar file."
+			    + " If you keep seeing this message, you might be "
+			    + "missing some ressources or the skin you are "
+			    + "using don't have them all.");
+	    cf.launch();
 	}
     }
 }

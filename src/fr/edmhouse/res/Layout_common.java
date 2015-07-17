@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
+import fr.edmhouse.main.Crashframe;
 import fr.edmhouse.main.StringMatcher;
 
 /**
  * Static class that holds the position of the different componnents in the
  * frame, and the default progress bar color.
  */
-public class CustomList {
+public class Layout_common implements ResLayout{
 
     /* buttons positions */
     public static int pos_mini_x = 0;
@@ -39,8 +40,8 @@ public class CustomList {
     public static float size_textoffset = 0;
     /* Colors */
     public static Color color_progress = null;
-
-    /** Initializes the data from a .edm file. */
+    public static Color color_text = null;
+    
     public static void initializeFromFile(String filepath) {
 	String filestring = "";
 	StringBuilder builder = new StringBuilder();
@@ -51,12 +52,16 @@ public class CustomList {
 		builder.append(line + "\n");
 	    br.close();
 	} catch (Exception e) {
+	    Crashframe cf = new Crashframe("Ressource error.",
+		    "Sorry, we couldn't find the layout.edm file in the ressources folder."
+			    + "Make sure that the file is present.");
+	    cf.launch();
 	}
 	filestring = builder.toString();
 	filestring = filestring.toLowerCase();
 	String[] array = filestring.split("\n");
 	// Starts to use the values.
-	int value, color_r = 0, color_g = 0, color_b = 0, color_a = 0;
+	int value, color_r = 0, color_g = 0, color_b = 0, color_a = 0, color_r1 = 0, color_g1 = 0, color_b1 = 0, color_a1 = 0;
 	for (int i = 0; i < array.length; i++) {
 	    try {
 		value = Integer.parseInt(StringMatcher
@@ -144,10 +149,23 @@ public class CustomList {
 	    case 32:
 		color_a = value;
 		break;
+	    case 33:
+		color_r1 = value;
+		break;
+	    case 34:
+		color_g1 = value;
+		break;
+	    case 35:
+		color_b1 = value;
+		break;
+	    case 36:
+		color_a1 = value;
+		break;
 	    default:
 		break;
 	    }
 	}
 	color_progress = new Color(color_r, color_g, color_b, color_a);
+	color_text = new Color(color_r1, color_g1, color_b1, color_a1);
     }
 }
