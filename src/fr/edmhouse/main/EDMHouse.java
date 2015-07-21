@@ -36,10 +36,12 @@ public class EDMHouse {
 	bgmthread = t;
 	bgmthread.start();
 	t.suspend();
-	while (true) {
+	long launchingTime = System.currentTimeMillis();
+	for (int i = 1;; i++) {
 	    try {
+		for(;launchingTime+(i*10)>System.currentTimeMillis();){
+		}
 		frame.update();
-		wait(0.01f);
 	    } catch (Exception e) {
 		Crashframe cf = new Crashframe("Internal error.",
 			"Sorry, an internal error happened. Error :"

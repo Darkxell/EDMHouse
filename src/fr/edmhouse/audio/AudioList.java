@@ -40,7 +40,7 @@ public class AudioList {
 	return this.songs[rand];
     }
 
-    /** Gets the next mp3 file url from the list. */
+    /** Gets the next mp3 file url from the list. Records the pick. */
     public Song getNextUrl() {
 	try {
 	    this.lastindex++;
@@ -49,6 +49,12 @@ public class AudioList {
 	    this.lastindex = 0;
 	    return this.songs[0];
 	}
+    }
+
+    /** Gets the wanted mp3 file url from the list. Records the pick. */
+    public Song getWantedUrl(int id) {
+	this.lastindex = id;
+	return this.songs[id];
     }
 
     /** Gets the number of songs in the list */

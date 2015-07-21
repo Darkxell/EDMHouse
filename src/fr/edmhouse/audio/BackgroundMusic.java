@@ -55,7 +55,7 @@ public class BackgroundMusic implements Runnable {
     public void changemusic(Song song) {
 	this.ischanging = true;
 	this.currentsong = song;
-	EDMHouse.frame.canvas.resetprogress(); // Nice code here.
+	EDMHouse.frame.canvas.resetprogress();
 	try {
 	    this.currentplayer.close();
 	} catch (Exception e) {

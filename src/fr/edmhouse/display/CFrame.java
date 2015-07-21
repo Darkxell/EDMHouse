@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import fr.edmhouse.main.EDMHouse;
 import fr.edmhouse.res.Layout_common;
+import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Res;
 
 public class CFrame {
@@ -21,6 +22,8 @@ public class CFrame {
      * rolled. Can be negative.
      */
     public double wheelvelocity;
+    /** Is true if the mouse is inside the frame. */
+    private boolean isMouseInside;
     /**
      * The x positon of the mouse on the frame. is 0 if the mouse is not inside.
      */
@@ -83,6 +86,14 @@ public class CFrame {
 			canvas.content = 1;
 		    else
 			canvas.content = 0;
+		if (canvas.hoveredSongButtonID != -1) {
+		    EDMHouse.bgmthread.resume();
+		    EDMHouse.BGM.instantstop();
+		    EDMHouse.BGM.changemusic(EDMHouse.songs
+			    .getWantedUrl(canvas.hoveredSongButtonID));
+		    if (canvas.state)
+			EDMHouse.bgmthread.suspend();
+		}
 	    }
 
 	    @Override
@@ -91,12 +102,12 @@ public class CFrame {
 
 	    @Override
 	    public void mouseExited(MouseEvent e) {
-		ix = 0;
-		iy = 0;
+		isMouseInside = false;
 	    }
 
 	    @Override
 	    public void mouseEntered(MouseEvent e) {
+		isMouseInside = true;
 	    }
 
 	    @Override
@@ -112,9 +123,22 @@ public class CFrame {
 
 	    @Override
 	    public void mouseDragged(MouseEvent e) {
-		int xs = e.getXOnScreen();
-		int ys = e.getYOnScreen();
-		frame.setLocation(xs - ix, ys - iy);
+		if (canvas.isMouseOnScrollbar()) {
+		    double mouseYOnBar = e.getY()
+			    - (Layout_list.pos_slider_y + (Layout_list.size_slider_height / 10));
+		    double maximumListOffset = Layout_list.pos_componnent_y
+			    + (EDMHouse.songs.getSongAmmount() * Res.list_componnent
+				    .getHeight())
+			    - Layout_common.size_frame_height;
+		    canvas.listoffset = (int) ((mouseYOnBar / (Layout_list.size_slider_height * 0.8)) * maximumListOffset);
+
+		} else {
+		    if (isMouseInside) {
+			int xs = e.getXOnScreen();
+			int ys = e.getYOnScreen();
+			frame.setLocation(xs - ix, ys - iy);
+		    }
+		}
 	    }
 	});
 	this.canvas.addMouseWheelListener(new MouseWheelListener() {
@@ -163,7 +187,22 @@ public class CFrame {
 	this.canvas.update(this.canvas.getGraphics());
     }
 
+    /**
+     * Predicate that returns true if the mouse is inside the specified
+     * rectangle area. Always return false if the mouse is not inside.
+     */
     public boolean isOnPos(int x1, int y1, int x2, int y2) {
-	return (ix > x1 && iy > y1 && ix <= x2 && iy <= y2);
+	if (EDMHouse.frame.isMouseInside)
+	    return (ix > x1 && iy > y1 && ix <= x2 && iy <= y2);
+	else
+	    return false;
+    }
+
+    /**
+     * Predicate that returns true if the mouse is inside the frame. Is auto
+     * updated by the mouse listener in the canvas.
+     */
+    public boolean isMouseInside() {
+	return this.isMouseInside;
     }
 }

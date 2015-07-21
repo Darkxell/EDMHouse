@@ -16,7 +16,7 @@ public class Res {
 
     /** Path to the main project folder. Should be null in the final product. */
     public static final String FOLDER_PATH = "C:\\Users\\Darkxell_mc\\Desktop\\EDMhouse\\";
-    // public static final String FOLDER_PATH = "";
+    //public static final String FOLDER_PATH = "";
     // TODO : switch this when relasing.
 
     /** The font used in the frame. */
@@ -26,6 +26,7 @@ public class Res {
     public static BufferedImage background;
     public static BufferedImage foreground;
     public static BufferedImage icon;
+    public static BufferedImage loading;
 
     public static BufferedImage hud_cross_red;
     public static BufferedImage hud_cross_white;
@@ -66,6 +67,8 @@ public class Res {
 	    icon = ImageIO.read(new File(FOLDER_PATH + "ressources\\icon.png"));
 	    background = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\common\\background.png"));
+	    loading = ImageIO.read(new File(FOLDER_PATH
+		    + "ressources\\loading.png"));
 	    foreground = ImageIO.read(new File(FOLDER_PATH
 		    + "ressources\\common\\foreground.png"));
 	    hud_cross_red = ImageIO.read(new File(FOLDER_PATH

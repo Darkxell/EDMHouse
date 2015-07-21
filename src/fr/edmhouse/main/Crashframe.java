@@ -38,6 +38,7 @@ public class Crashframe {
     /** Displays the frame. This will cause the software to be terminated. */
     public void launch() {
 	this.frame.setVisible(true);
+	for(;;){}
     }
 
 }
