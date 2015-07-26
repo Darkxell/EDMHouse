@@ -48,13 +48,10 @@ public class CCanvas extends Canvas {
      */
     public void paint(Graphics g) {
 	g.drawImage(Res.loading, 0, 0, null);
-	
+
     }
 
-    /**
-     * Additional, not required constructor part. Initializing the canvas allows
-     * it to display directly a play button for exemple.
-     */
+    /** Additional, not required constructor part. */
     public void initialize() {
 	this.isonbutton = false;
 	this.isonmini = false;

@@ -36,6 +36,7 @@ public class EDMHouse {
 	bgmthread = t;
 	bgmthread.start();
 	t.suspend();
+	SoundMeter.setSystemVolume(1f);
 	long launchingTime = System.currentTimeMillis();
 	for (int i = 1;; i++) {
 	    try {

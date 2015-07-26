@@ -11,7 +11,7 @@ import fr.edmhouse.main.StringMatcher;
  * Static class that holds the position of the different componnents in the
  * frame, and the default progress bar color.
  */
-public class Layout_common implements ResLayout{
+public class Layout_common implements ResLayout {
 
     /* buttons positions */
     public static int pos_mini_x = 0;
@@ -41,7 +41,7 @@ public class Layout_common implements ResLayout{
     /* Colors */
     public static Color color_progress = null;
     public static Color color_text = null;
-    
+
     public static void initializeFromFile(String filepath) {
 	String filestring = "";
 	StringBuilder builder = new StringBuilder();
@@ -70,99 +70,66 @@ public class Layout_common implements ResLayout{
 	    } catch (Exception e) {
 		value = 0;
 	    }
-	    switch (i) {
-	    case 1:
+	    if (array[i].startsWith("pos_mini_x(")) {
 		pos_mini_x = value;
-		break;
-	    case 2:
+	    } else if (array[i].startsWith("pos_mini_y(")) {
 		pos_mini_y = value;
-		break;
-	    case 3:
+	    } else if (array[i].startsWith("pos_close_x(")) {
 		pos_close_x = value;
-		break;
-	    case 4:
+	    } else if (array[i].startsWith("pos_close_y(")) {
 		pos_close_y = value;
-		break;
-	    case 5:
+	    } else if (array[i].startsWith("pos_list_x(")) {
 		pos_list_x = value;
-		break;
-	    case 6:
+	    } else if (array[i].startsWith("pos_list_y(")) {
 		pos_list_y = value;
-		break;
-	    case 7:
+	    } else if (array[i].startsWith("pos_skip_x(")) {
 		pos_skip_x = value;
-		break;
-	    case 8:
+	    } else if (array[i].startsWith("pos_skip_y(")) {
 		pos_skip_y = value;
-		break;
-	    case 9:
+	    } else if (array[i].startsWith("pos_random_x(")) {
 		pos_random_x = value;
-		break;
-	    case 10:
+	    } else if (array[i].startsWith("pos_random_y(")) {
 		pos_random_y = value;
-		break;
-	    case 11:
+	    } else if (array[i].startsWith("pos_button_x(")) {
 		pos_button_x = value;
-		break;
-	    case 12:
+	    } else if (array[i].startsWith("pos_button_y(")) {
 		pos_button_y = value;
-		break;
-	    case 15:
+	    } else if (array[i].startsWith("pos_progress_x(")) {
 		pos_progress_x = value;
-		break;
-	    case 16:
+	    } else if (array[i].startsWith("pos_progress_y(")) {
 		pos_progress_y = value;
-		break;
-	    case 17:
+	    } else if (array[i].startsWith("pos_text_x(")) {
 		pos_text_x = value;
-		break;
-	    case 18:
+	    } else if (array[i].startsWith("pos_text_y(")) {
 		pos_text_y = value;
-		break;
-	    case 21:
+	    } else if (array[i].startsWith("size_text(")) {
 		size_text = ((float) value) / 100;
-		break;
-	    case 22:
+	    } else if (array[i].startsWith("size_progress_height(")) {
 		size_progress_height = value;
-		break;
-	    case 23:
+	    } else if (array[i].startsWith("size_progress_width(")) {
 		size_progress_width = value;
-		break;
-	    case 24:
+	    } else if (array[i].startsWith("size_frame_height(")) {
 		size_frame_height = value;
-		break;
-	    case 25:
+	    } else if (array[i].startsWith("size_frame_width(")) {
 		size_frame_width = value;
-		break;
-	    case 26:
+	    } else if (array[i].startsWith("size_textoffset(")) {
 		size_textoffset = ((float) value) / 100;
-		break;
-	    case 29:
+	    } else if (array[i].startsWith("color_progress_red(")) {
 		color_r = value;
-		break;
-	    case 30:
+	    } else if (array[i].startsWith("color_progress_green(")) {
 		color_g = value;
-		break;
-	    case 31:
+	    } else if (array[i].startsWith("color_progress_blue(")) {
 		color_b = value;
-		break;
-	    case 32:
+	    } else if (array[i].startsWith("color_progress_alpha(")) {
 		color_a = value;
-		break;
-	    case 33:
+	    } else if (array[i].startsWith("color_text_red(")) {
 		color_r1 = value;
-		break;
-	    case 34:
+	    } else if (array[i].startsWith("color_text_green(")) {
 		color_g1 = value;
-		break;
-	    case 35:
+	    } else if (array[i].startsWith("color_text_blue(")) {
 		color_b1 = value;
-		break;
-	    case 36:
+	    } else if (array[i].startsWith("color_text_alpha(")) {
 		color_a1 = value;
-		break;
-	    default:
-		break;
 	    }
 	}
 	color_progress = new Color(color_r, color_g, color_b, color_a);
