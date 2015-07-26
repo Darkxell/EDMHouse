@@ -26,6 +26,8 @@ public class Layout_common implements ResLayout {
     public static int pos_random_y = 0;
     public static int pos_button_x = 0;
     public static int pos_button_y = 0;
+    public static int pos_volume_x = 0;
+    public static int pos_volume_y = 0;
     /* other positions */
     public static int pos_progress_x = 0;
     public static int pos_progress_y = 0;
@@ -41,6 +43,8 @@ public class Layout_common implements ResLayout {
     /* Colors */
     public static Color color_progress = null;
     public static Color color_text = null;
+    /* Others */
+    public static int value_volumestart = 0;
 
     public static void initializeFromFile(String filepath) {
 	String filestring = "";
@@ -94,6 +98,10 @@ public class Layout_common implements ResLayout {
 		pos_button_x = value;
 	    } else if (array[i].startsWith("pos_button_y(")) {
 		pos_button_y = value;
+	    } else if (array[i].startsWith("pos_volume_x(")) {
+		pos_volume_x = value;
+	    } else if (array[i].startsWith("pos_volume_y(")) {
+		pos_volume_y = value;
 	    } else if (array[i].startsWith("pos_progress_x(")) {
 		pos_progress_x = value;
 	    } else if (array[i].startsWith("pos_progress_y(")) {
@@ -130,6 +138,8 @@ public class Layout_common implements ResLayout {
 		color_b1 = value;
 	    } else if (array[i].startsWith("color_text_alpha(")) {
 		color_a1 = value;
+	    } else if (array[i].startsWith("value_volumestart(")) {
+		value_volumestart = value;
 	    }
 	}
 	color_progress = new Color(color_r, color_g, color_b, color_a);

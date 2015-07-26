@@ -10,6 +10,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JFrame;
 
 import fr.edmhouse.main.EDMHouse;
+import fr.edmhouse.main.SoundMeter;
 import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Res;
@@ -34,6 +35,7 @@ public class CFrame {
     private int iy;
     /** The Jframe object used to display stuff. Should be left untouched. */
     private JFrame frame;
+    /** The canvas object used in the frame. */
     public CCanvas canvas;
 
     /**
@@ -58,18 +60,19 @@ public class CFrame {
 	    @SuppressWarnings("deprecation")
 	    @Override
 	    public void mouseReleased(MouseEvent e) {
-		if (canvas.isonclose)
+		int hoveredID = canvas.hoveredSongButtonID;
+		if (canvas.isonclose())
 		    System.exit(0);
-		if (canvas.isonmini)
+		else if (canvas.isonmini()) {
 		    frame.setState(Frame.ICONIFIED);
-		if (canvas.isonbutton && canvas.content == 0) {
+		    Res.flush();
+		} else if (canvas.isonbutton()) {
 		    canvas.state = !canvas.state;
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
 		    else
 			EDMHouse.bgmthread.resume();
-		}
-		if (canvas.isonskip) {
+		} else if (canvas.isonskip()) {
 		    EDMHouse.bgmthread.resume();
 		    EDMHouse.BGM.instantstop();
 		    if (canvas.random_on)
@@ -78,19 +81,18 @@ public class CFrame {
 			EDMHouse.BGM.changemusic(EDMHouse.songs.getNextUrl());
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
-		}
-		if (canvas.isonrandom)
+		} else if (canvas.isonrandom())
 		    canvas.random_on = !canvas.random_on;
-		if (canvas.isonlist)
+		else if (canvas.isonlist())
 		    if (canvas.content == 0)
 			canvas.content = 1;
 		    else
 			canvas.content = 0;
-		if (canvas.hoveredSongButtonID != -1) {
+		else if (hoveredID != -1) {
 		    EDMHouse.bgmthread.resume();
 		    EDMHouse.BGM.instantstop();
 		    EDMHouse.BGM.changemusic(EDMHouse.songs
-			    .getWantedUrl(canvas.hoveredSongButtonID));
+			    .getWantedUrl(hoveredID));
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
 		}
@@ -131,7 +133,17 @@ public class CFrame {
 				    .getHeight())
 			    - Layout_common.size_frame_height;
 		    canvas.listoffset = (int) ((mouseYOnBar / (Layout_list.size_slider_height * 0.8)) * maximumListOffset);
-
+		} else if (canvas.isonvolume()) {
+		    double mouseXOnBar = e.getX() - Layout_common.pos_volume_x
+			    - (Res.hud_ki.getWidth() / 2);
+		    int volValue = (int) (mouseXOnBar
+			    / (Res.hud_volume.getWidth()-Res.hud_ki.getWidth()) * 100);
+		    if (volValue > 100)
+			volValue = 100;
+		    if (volValue < 0)
+			volValue = 0;
+		    canvas.volume = volValue;
+		    SoundMeter.setSystemVolume(((float)volValue)/100);
 		} else {
 		    if (isMouseInside) {
 			int xs = e.getXOnScreen();
@@ -160,31 +172,10 @@ public class CFrame {
 	    this.wheelvelocity = 0;
 	// TODO : change the wheelvelocity decreasement to something fixed in
 	// time? or perhaps make it customisable in the layout.edm file?
-	this.canvas.isonrandom = this.isOnPos(Layout_common.pos_random_x,
-		Layout_common.pos_random_y, Layout_common.pos_random_x
-			+ Res.hud_random.getWidth(), Layout_common.pos_random_y
-			+ Res.hud_random.getHeight());
-	this.canvas.isonlist = this.isOnPos(Layout_common.pos_list_x,
-		Layout_common.pos_list_y, Layout_common.pos_list_x
-			+ Res.hud_list.getWidth(), Layout_common.pos_list_y
-			+ Res.hud_list.getHeight());
-	this.canvas.isonskip = this.isOnPos(Layout_common.pos_skip_x,
-		Layout_common.pos_skip_y, Layout_common.pos_skip_x
-			+ Res.hud_skip.getWidth(), Layout_common.pos_skip_y
-			+ Res.hud_skip.getHeight());
-	this.canvas.isonclose = this.isOnPos(Layout_common.pos_close_x,
-		Layout_common.pos_close_y, Layout_common.pos_close_x
-			+ Res.hud_cross_white.getWidth(),
-		Layout_common.pos_close_y + Res.hud_cross_white.getHeight());
-	this.canvas.isonmini = this.isOnPos(Layout_common.pos_mini_x,
-		Layout_common.pos_mini_y, Layout_common.pos_mini_x
-			+ Res.hud_mini_white.getWidth(),
-		Layout_common.pos_mini_y + Res.hud_mini_white.getHeight());
-	this.canvas.isonbutton = this.isOnPos(Layout_common.pos_button_x,
-		Layout_common.pos_button_y, Layout_common.pos_button_x
-			+ Res.hud_play.getWidth(), Layout_common.pos_button_y
-			+ Res.hud_play.getHeight());
-	this.canvas.update(this.canvas.getGraphics());
+	if (this.isVisible()) {
+	    Res.restore();
+	    this.canvas.update(this.canvas.getGraphics());
+	}
     }
 
     /**
@@ -204,5 +195,10 @@ public class CFrame {
      */
     public boolean isMouseInside() {
 	return this.isMouseInside;
+    }
+
+    /** predicate that returns true if the frame is visible (not iconified). */
+    public boolean isVisible() {
+	return (this.frame.getExtendedState() != JFrame.ICONIFIED);
     }
 }
