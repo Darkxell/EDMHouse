@@ -43,6 +43,7 @@ public class CFrame {
      * JFrame.
      */
     public CFrame() {
+	
 	this.frame = new JFrame();
 	this.frame.setResizable(false);
 	this.frame.setUndecorated(true);
@@ -52,6 +53,10 @@ public class CFrame {
 	this.frame.setLocationRelativeTo(null);
 	this.frame.setIconImage(Res.icon);
 	this.frame.setTitle("EDMhouse");
+	//this.frame.setBackground(new Color(0, 0, 0, 0));
+	//this.frame.setContentPane(new ShadowPane());
+        //this.frame.setLayout(new BorderLayout());
+	// TODO : Work on this later on.
 	this.canvas = new CCanvas();
 	this.canvas.setSize(Layout_common.size_frame_width,
 		Layout_common.size_frame_height);
@@ -172,6 +177,8 @@ public class CFrame {
 	    this.wheelvelocity = 0;
 	// TODO : change the wheelvelocity decreasement to something fixed in
 	// time? or perhaps make it customisable in the layout.edm file?
+	if (!this.canvas.state)
+	    this.canvas.progression += 10;
 	if (this.isVisible()) {
 	    Res.restore();
 	    this.canvas.update(this.canvas.getGraphics());

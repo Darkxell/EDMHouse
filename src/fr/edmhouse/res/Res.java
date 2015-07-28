@@ -10,13 +10,15 @@ import fr.edmhouse.main.Crashframe;
 
 /**
  * Static class that holds ressources as Java objects for font and images. Make
- * sure to initialize it before using it.
+ * sure to initialize it before using it. Contained data can be flushed to
+ * improve RAM usage when ressources are not needed. Make sure to check if the
+ * data is set before using it, otherwise it will be null.
  */
 public class Res {
 
     /** Path to the main project folder. Should be null in the final product. */
     public static final String FOLDER_PATH = "C:\\Users\\Darkxell_mc\\Desktop\\EDMhouse\\";
-    //public static final String FOLDER_PATH = "";
+    // public static final String FOLDER_PATH = "";
     // TODO : switch this when relasing.
 
     /** Boolean that is true ONLY if the images are loaded */

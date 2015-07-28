@@ -59,9 +59,6 @@ public class CCanvas extends Canvas {
 
     @Override
     public void update(Graphics gr) {
-	if (!this.state)
-	    this.progression += 10;
-	// TODO : manage the framerate here.
 	if (this.content != 1)
 	    this.listoffset = 0;
 	this.hoveredSongButtonID = -1;
