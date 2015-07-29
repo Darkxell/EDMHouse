@@ -147,6 +147,7 @@ public class StampFilter extends PointFilter {
 	}
 
 	public int filterRGB(int x, int y, int rgb) {
+		@SuppressWarnings("unused")
 		int a = rgb & 0xff000000;
 		int r = (rgb >> 16) & 0xff;
 		int g = (rgb >> 8) & 0xff;

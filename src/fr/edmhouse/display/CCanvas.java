@@ -155,7 +155,8 @@ public class CCanvas extends Canvas {
 	g.setColor(Layout_common.color_text);
 	g.setFont(Res.font);
 	FontMetrics metric = g.getFontMetrics();
-	char[] songtitle = (EDMHouse.BGM.getdisplayname() + "  -  " + EDMHouse.BGM
+	char[] songtitle = (EDMHouse.BGM.getdisplayname() + "  -  "
+		+ EDMHouse.BGM.getdisplayname() + "  -  " + EDMHouse.BGM
 		.getdisplayname()).toCharArray();
 	g.drawChars(songtitle, 0, songtitle.length,
 		(int) (Layout_common.pos_text_x + this.textoffset),

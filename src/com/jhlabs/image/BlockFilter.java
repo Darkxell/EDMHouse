@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.jhlabs.image;
 
-import java.awt.*;
 import java.awt.image.*;
 
 /**
@@ -60,6 +59,7 @@ public class BlockFilter extends AbstractBufferedImageOp {
 		return blockSize;
 	}
 
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

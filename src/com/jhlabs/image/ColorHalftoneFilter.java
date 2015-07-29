@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.jhlabs.image;
 
-import java.awt.*;
-import java.awt.geom.*;
 import java.awt.image.*;
 
 /**
@@ -107,6 +105,7 @@ public class ColorHalftoneFilter extends AbstractBufferedImageOp {
 		this.yellowScreenAngle = yellowScreenAngle;
 	}
 
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

@@ -18,8 +18,6 @@ package com.jhlabs.image;
 
 import java.util.*;
 import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
 
 /**
  * An image Quantizer based on the Octree algorithm. This is a very basic implementation
@@ -64,13 +62,16 @@ public class OctTreeQuantizer implements Quantizer {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private int nodes = 0;
 	private OctTreeNode root;
 	private int reduceColors;
 	private int maximumColors;
 	private int colors = 0;
+	@SuppressWarnings("rawtypes")
 	private Vector[] colorList;
 	
+	@SuppressWarnings("rawtypes")
 	public OctTreeQuantizer() {
 		setup(256);
 		colorList = new Vector[MAX_LEVEL+1];
@@ -139,6 +140,7 @@ public class OctTreeQuantizer implements Quantizer {
 		return 0;
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	private void insertColor(int rgb) {
 		int red = (rgb >> 16) & 0xff;
 		int green = (rgb >> 8) & 0xff;
@@ -195,6 +197,7 @@ public class OctTreeQuantizer implements Quantizer {
 		System.out.println("insertColor failed");
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void reduceTree(int numColors) {
 		for (int level = MAX_LEVEL-1; level >= 0; level--) {
 			Vector v = colorList[level];

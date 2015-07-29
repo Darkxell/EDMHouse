@@ -18,7 +18,6 @@ package com.jhlabs.composite;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.color.*;
 
 /**
  * A special Composite used for drawing "marching ants". It draws the ants at the 127 contour of the alpha channel of the source.

@@ -17,10 +17,11 @@ limitations under the License.
 package com.jhlabs.image;
 
 import java.awt.image.*;
+
 import com.jhlabs.math.*;
 import com.jhlabs.vecmath.*;
+
 import java.awt.*;
-import java.io.*;
 import java.util.*;
 
 /**
@@ -63,6 +64,7 @@ public class LightFilter extends WholeImageFilter {
 	private int bumpShape;
 	private float viewDistance = 10000.0f;
 	Material material;
+	@SuppressWarnings("rawtypes")
 	private Vector lights;
 	private int colorSource = COLORS_FROM_IMAGE;
 	private int bumpSource = BUMPS_FROM_IMAGE;
@@ -80,6 +82,7 @@ public class LightFilter extends WholeImageFilter {
 	private Color4f specular_color;
 	private Vector3f tmpv, tmpv2;
 
+	@SuppressWarnings("rawtypes")
 	public LightFilter() {
 		lights = new Vector();
 		addLight(new DistantLight());
@@ -185,6 +188,7 @@ public class LightFilter extends WholeImageFilter {
 		return material.diffuseColor;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addLight(Light light) {
 		lights.addElement(light);
 	}
@@ -193,6 +197,7 @@ public class LightFilter extends WholeImageFilter {
 		lights.removeElement(light);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Vector getLights() {
 		return lights;
 	}

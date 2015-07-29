@@ -18,7 +18,6 @@ package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * A filter which can be used to produce wipes by transferring the luma of a Destination image into the alpha channel of the source.
@@ -69,6 +68,7 @@ public class ChromaKeyFilter extends AbstractBufferedImageOp {
 		return color;
 	}
 		
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

@@ -18,7 +18,6 @@ package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * An experimental filter which can be used for keying against a clean shot. Given a source image, a clean image and a destination image, 
@@ -125,6 +124,7 @@ public class KeyFilter extends AbstractBufferedImageOp {
 		return cleanImage;
 	}
 		
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

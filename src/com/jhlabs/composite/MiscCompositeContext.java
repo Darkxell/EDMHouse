@@ -17,21 +17,24 @@ limitations under the License.
 package com.jhlabs.composite;
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.image.*;
 import java.awt.color.*;
-import java.net.*;
-import java.io.*;
 
 public class MiscCompositeContext implements CompositeContext {
 
 	private int rule;
 	private float alpha;
+	@SuppressWarnings("unused")
 	private ColorModel srcColorModel;
+	@SuppressWarnings("unused")
 	private ColorModel dstColorModel;
+	@SuppressWarnings("unused")
 	private ColorSpace srcColorSpace;
+	@SuppressWarnings("unused")
 	private ColorSpace dstColorSpace;
+	@SuppressWarnings("unused")
 	private boolean srcNeedsConverting;
+	@SuppressWarnings("unused")
 	private boolean dstNeedsConverting;
 
 	public MiscCompositeContext(int rule,
@@ -44,6 +47,7 @@ public class MiscCompositeContext implements CompositeContext {
 		this.dstColorModel = dstColorModel;
 		this.srcColorSpace = srcColorModel.getColorSpace();
 		this.dstColorSpace = dstColorModel.getColorSpace();
+		@SuppressWarnings("unused")
 		ColorModel srgbCM = ColorModel.getRGBdefault();
 //		srcNeedsConverting = !srcColorModel.equals(srgbCM);
 //		dstNeedsConverting = !dstColorModel.equals(srgbCM);
@@ -62,6 +66,7 @@ public class MiscCompositeContext implements CompositeContext {
 		return a < 0 ? 0 : a > 255 ? 255 : a;
 	}
 	
+	@SuppressWarnings("unused")
 	public void compose(Raster src, Raster dstIn, WritableRaster dstOut) {
 		float a=0, ac=0;
 		float alpha = this.alpha;

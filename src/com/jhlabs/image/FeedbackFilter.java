@@ -242,6 +242,7 @@ public class FeedbackFilter extends AbstractBufferedImageOp {
 		return iterations;
 	}
 	
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         if ( dst == null )
             dst = createCompatibleDestImage( src, null );

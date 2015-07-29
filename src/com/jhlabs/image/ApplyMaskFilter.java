@@ -16,9 +16,7 @@ limitations under the License.
 
 package com.jhlabs.image;
 
-import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 
 /**
  * A filter which uses the alpha channel of a "mask" image to interpolate between a source and destination image.
@@ -127,6 +125,7 @@ public class ApplyMaskFilter extends AbstractBufferedImageOp {
 		}
 	}
 
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

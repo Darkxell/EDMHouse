@@ -17,7 +17,6 @@ limitations under the License.
 package com.jhlabs.image;
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.image.*;
 
 /**
@@ -76,6 +75,7 @@ public class CurlFilter extends TransformFilter {
 		private int width, height;
 		private int[] inPixels;
 		
+		@SuppressWarnings("unused")
 		public Sampler( BufferedImage image ) {
 			int width = image.getWidth();
 			int height = image.getHeight();
@@ -123,6 +123,7 @@ public class CurlFilter extends TransformFilter {
 		}
 	}
 	
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

@@ -21,6 +21,7 @@ import java.awt.image.*;
 
 public class ImageCombiningFilter {
 
+	@SuppressWarnings("unused")
 	public int filterRGB(int x, int y, int rgb1, int rgb2) {
 		int a1 = (rgb1 >> 24) & 0xff;
 		int r1 = (rgb1 >> 16) & 0xff;

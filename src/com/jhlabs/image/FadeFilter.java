@@ -15,13 +15,9 @@ limitations under the License.
 */
 
 package com.jhlabs.image;
-
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-
 public class FadeFilter extends PointFilter {
 
+	@SuppressWarnings("unused")
 	private int width, height;
 	private float angle = 0.0f;
 	private float fadeStart = 1.0f;

@@ -54,7 +54,9 @@ public class FlipFilter extends AbstractBufferedImageOp {
 	public static final int FLIP_180 = 6;
 
 	private int operation;
+	@SuppressWarnings("unused")
 	private int width, height;
+	@SuppressWarnings("unused")
 	private int newWidth, newHeight;
 
     /**
@@ -90,6 +92,7 @@ public class FlipFilter extends AbstractBufferedImageOp {
 		return operation;
 	}
 
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int width = src.getWidth();
         int height = src.getHeight();

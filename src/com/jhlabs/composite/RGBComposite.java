@@ -54,8 +54,10 @@ public abstract class RGBComposite implements Composite {
     public abstract static class RGBCompositeContext implements CompositeContext {
 
         private float alpha;
-        private ColorModel srcColorModel;
-        private ColorModel dstColorModel;
+        @SuppressWarnings("unused")
+	private ColorModel srcColorModel;
+        @SuppressWarnings("unused")
+	private ColorModel dstColorModel;
 
         public RGBCompositeContext( float alpha, ColorModel srcColorModel, ColorModel dstColorModel ) {
             this.alpha = alpha;

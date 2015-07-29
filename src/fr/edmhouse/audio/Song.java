@@ -60,8 +60,10 @@ public class Song {
      * files. Returns 0 in case of errors.<br/>
      * Note : I'm aware that this is not hte best method to get it, but I just
      * couldn't find something better. <br/>
-     * Deprecated : this method has been deprecated due to high and not
-     * necessary CPU usage. It is also rather slow.
+     * <strong>Deprecated :</strong> this method has been deprecated due to high
+     * and not necessary CPU usage. It is also rather slow. MP3 length can now
+     * be obtained by creating a Song Object with the filepath, and using the
+     * public Song.length attribute.
      */
     @Deprecated
     public static int getmp3Length(File file) {
@@ -79,7 +81,5 @@ public class Song {
 	    e.printStackTrace();
 	    return 0;
 	}
-
     }
-
 }

@@ -19,6 +19,7 @@ package com.jhlabs.image;
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
+
 import com.jhlabs.math.*;
 
 public class SkyFilter extends PointFilter {
@@ -33,11 +34,16 @@ public class SkyFilter extends PointFilter {
 	private float gain = 1.0f;
 	private float bias = 0.6f;
 	private int operation;
+	@SuppressWarnings("unused")
 	private float min;
+	@SuppressWarnings("unused")
 	private float max;
+	@SuppressWarnings("unused")
 	private boolean ridged;
+	@SuppressWarnings("unused")
 	private FBM fBm;
 	protected Random random = new Random();
+	@SuppressWarnings("unused")
 	private Function2D basis;
 
 	private float cloudCover = 0.5f;
@@ -47,6 +53,7 @@ public class SkyFilter extends PointFilter {
 	private float glowFalloff = 0.5f;
 	private float haziness = 0.96f;
 	private float t = 0.0f;
+	@SuppressWarnings("unused")
 	private float sunRadius = 10f;
 	private int sunColor = 0xffffffff;
 	private float sunR, sunG, sunB;
@@ -61,6 +68,7 @@ public class SkyFilter extends PointFilter {
 	private float[] exponents;
 	private float[] tan;
 	private BufferedImage skyColors;
+	@SuppressWarnings("unused")
 	private int[] skyPixels;
 	
 	private final static float r255 = 1.0f/255.0f;
@@ -266,6 +274,7 @@ public class SkyFilter extends PointFilter {
 	}
 
 float mn, mx;
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
 long start = System.currentTimeMillis();
 		sunR = (float)((sunColor >> 16) & 0xff) * r255;
@@ -334,6 +343,7 @@ System.out.println(mn+" "+mx+" "+(finish-start)*0.001f);
 		return value;
 	}
 
+	@SuppressWarnings("unused")
 	public int filterRGB(int x, int y, int rgb) {
 
 // Curvature

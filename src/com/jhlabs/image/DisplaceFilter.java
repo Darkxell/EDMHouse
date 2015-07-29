@@ -16,9 +16,7 @@ limitations under the License.
 
 package com.jhlabs.image;
 
-import java.awt.*;
 import java.awt.image.*;
-import com.jhlabs.math.*;
 
 /**
  * A filter which simulates the appearance of looking through glass. A separate grayscale displacement image is provided and
@@ -72,6 +70,7 @@ public class DisplaceFilter extends TransformFilter {
 		return amount;
 	}
 	
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
 		int w = src.getWidth();
 		int h = src.getHeight();
@@ -118,6 +117,7 @@ public class DisplaceFilter extends TransformFilter {
 		return dst;
 	}
 	
+	@SuppressWarnings("unused")
 	protected void transformInverse(int x, int y, float[] out) {
 		float xDisplacement, yDisplacement;
 		float nx = x;

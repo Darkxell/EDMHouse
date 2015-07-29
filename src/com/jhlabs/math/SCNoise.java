@@ -29,6 +29,7 @@ public class SCNoise implements Function1D, Function2D, Function3D {
 		return evaluate(x, .1f);
 	}
 	
+	@SuppressWarnings("unused")
 	public float evaluate(float x, float y) {
 		int i, j, k, h, n;
 		int ix, iy;

@@ -17,7 +17,6 @@ limitations under the License.
 package com.jhlabs.image;
 
 import java.awt.*;
-import java.awt.image.*;
 
 /**
  * A filter which reduces a binary image to a skeleton.
@@ -49,6 +48,7 @@ public class SkeletonFilter extends BinaryFilter {
 		newColor = 0xffffffff;
 	}
 
+	@SuppressWarnings("unused")
 	protected int[] filterPixels( int width, int height, int[] inPixels, Rectangle transformedSpace ) {
 		int[] outPixels = new int[width * height];
 

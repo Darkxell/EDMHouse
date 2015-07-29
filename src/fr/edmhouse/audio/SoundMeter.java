@@ -1,4 +1,4 @@
-package fr.edmhouse.main;
+package fr.edmhouse.audio;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.FloatControl;

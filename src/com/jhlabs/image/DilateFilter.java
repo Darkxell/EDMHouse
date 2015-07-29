@@ -17,7 +17,6 @@ limitations under the License.
 package com.jhlabs.image;
 
 import java.awt.*;
-import java.awt.image.*;
 
 /**
  * Given a binary image, this filter performs binary dilation, setting all added pixels to the given 'new' color.

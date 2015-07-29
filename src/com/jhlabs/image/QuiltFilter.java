@@ -18,8 +18,6 @@ package com.jhlabs.image;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.image.*;
-import com.jhlabs.math.*;
 
 public class QuiltFilter extends WholeImageFilter {
 
@@ -124,6 +122,7 @@ public class QuiltFilter extends WholeImageFilter {
 		return colormap;
 	}
 	
+	@SuppressWarnings("unused")
 	protected int[] filterPixels( int width, int height, int[] inPixels, Rectangle transformedSpace ) {
 		int[] outPixels = new int[width * height];
 

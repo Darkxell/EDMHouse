@@ -137,7 +137,8 @@ public class ShatterFilter extends AbstractBufferedImageOp {
         float height = (float)src.getHeight();
         float cx = (float)src.getWidth() * centreX;
         float cy = (float)src.getHeight() * centreY;
-        float imageRadius = (float)Math.sqrt( cx*cx + cy*cy );
+        @SuppressWarnings("unused")
+	float imageRadius = (float)Math.sqrt( cx*cx + cy*cy );
 
 //        BufferedImage[] tiles = new BufferedImage[iterations];
 		int numTiles = iterations*iterations;
@@ -150,6 +151,7 @@ public class ShatterFilter extends AbstractBufferedImageOp {
 //		g.drawImage( src, null, null );
 
         Random random = new Random( 0 );
+		@SuppressWarnings("unused")
 		float lastx = 0, lasty = 0;
 /*
         for ( int i = 0; i <= numTiles; i++ ) {
@@ -206,6 +208,7 @@ public class ShatterFilter extends AbstractBufferedImageOp {
 			float y = transition * height*(float)Math.sin(angle);
 
 			Tile tile = shapes[i];
+			@SuppressWarnings("unused")
 			Rectangle r = tile.shape.getBounds();
 			AffineTransform t = g.getTransform();
 x = tile.x + transition * tile.vx;

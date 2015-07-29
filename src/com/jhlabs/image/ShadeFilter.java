@@ -17,11 +17,11 @@ limitations under the License.
 package com.jhlabs.image;
 
 import java.awt.image.*;
+
 import com.jhlabs.math.*;
 import com.jhlabs.vecmath.*;
+
 import java.awt.*;
-import java.io.*;
-import java.util.*;
 
 public class ShadeFilter extends WholeImageFilter {
 	
@@ -36,17 +36,23 @@ public class ShadeFilter extends WholeImageFilter {
 	private float bumpHeight;
 	private float bumpSoftness;
 	private float viewDistance = 10000.0f;
+	@SuppressWarnings("unused")
 	private int colorSource = COLORS_FROM_IMAGE;
 	private int bumpSource = BUMPS_FROM_IMAGE;
 	private Function2D bumpFunction;
 	private BufferedImage environmentMap;
 	private int[] envPixels;
 	private int envWidth = 1, envHeight = 1;
+	@SuppressWarnings("unused")
 	private Vector3f l;
 	private Vector3f v;
+	@SuppressWarnings("unused")
 	private Vector3f n;
+	@SuppressWarnings("unused")
 	private Color4f shadedColor;
+	@SuppressWarnings("unused")
 	private Color4f diffuse_color;
+	@SuppressWarnings("unused")
 	private Color4f specular_color;
 	private Vector3f tmpv, tmpv2;
 

@@ -18,8 +18,6 @@ package com.jhlabs.image;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.image.*;
-import com.jhlabs.math.*;
 
 public class SmearFilter extends WholeImageFilter {
 	
@@ -28,6 +26,7 @@ public class SmearFilter extends WholeImageFilter {
 	public final static int CIRCLES = 2;
 	public final static int SQUARES = 3;
 
+	@SuppressWarnings("unused")
 	private Colormap colormap = new LinearColormap();
 	private float angle = 0;
 	private float density = 0.5f;
@@ -123,6 +122,7 @@ public class SmearFilter extends WholeImageFilter {
 		seed = new Date().getTime();
 	}
 	
+	@SuppressWarnings("unused")
 	private float random(float low, float high) {
 		return low+(high-low) * randomGenerator.nextFloat();
 	}

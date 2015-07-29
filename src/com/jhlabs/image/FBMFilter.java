@@ -18,6 +18,7 @@ package com.jhlabs.image;
 
 import java.awt.image.*;
 import java.util.*;
+
 import com.jhlabs.math.*;
 
 /**
@@ -48,6 +49,7 @@ public class FBMFilter extends PointFilter implements Cloneable {
 	private float min;
 	private float max;
 	private Colormap colormap = new Gradient();
+	@SuppressWarnings("unused")
 	private boolean ridged;
 	private FBM fBm;
 	protected Random random = new Random();

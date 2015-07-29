@@ -9,8 +9,8 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 
+import fr.edmhouse.audio.SoundMeter;
 import fr.edmhouse.main.EDMHouse;
-import fr.edmhouse.main.SoundMeter;
 import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Res;

@@ -123,6 +123,7 @@ public class CropFilter extends AbstractBufferedImageOp {
 		return height;
 	}
 
+    @SuppressWarnings("unused")
     public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
         int w = src.getWidth();
         int h = src.getHeight();
