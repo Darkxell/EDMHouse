@@ -390,6 +390,20 @@ public class CCanvas extends Canvas {
     }
 
     /**
+     * predicate that returns true if the mouse is over the progress bar, in the
+     * play state only.
+     */
+    public boolean isonprogress() {
+	if (this.content != 0)
+	    return false;
+	return EDMHouse.frame.isOnPos(Layout_common.pos_progress_x,
+		Layout_common.pos_progress_y, Layout_common.pos_progress_x
+			+ Layout_common.size_progress_width,
+		Layout_common.pos_progress_y
+			+ Layout_common.size_progress_height);
+    }
+
+    /**
      * predicate that returns true if the mouse is over the volume bar, in any
      * state.
      */

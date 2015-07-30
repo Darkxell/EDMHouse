@@ -43,7 +43,7 @@ public class CFrame {
      * JFrame.
      */
     public CFrame() {
-	
+
 	this.frame = new JFrame();
 	this.frame.setResizable(false);
 	this.frame.setUndecorated(true);
@@ -53,9 +53,9 @@ public class CFrame {
 	this.frame.setLocationRelativeTo(null);
 	this.frame.setIconImage(Res.icon);
 	this.frame.setTitle("EDMhouse");
-	//this.frame.setBackground(new Color(0, 0, 0, 0));
-	//this.frame.setContentPane(new ShadowPane());
-        //this.frame.setLayout(new BorderLayout());
+	// this.frame.setBackground(new Color(0, 0, 0, 0));
+	// this.frame.setContentPane(new ShadowPane());
+	// this.frame.setLayout(new BorderLayout());
 	// TODO : Work on this later on.
 	this.canvas = new CCanvas();
 	this.canvas.setSize(Layout_common.size_frame_width,
@@ -100,6 +100,11 @@ public class CFrame {
 			    .getWantedUrl(hoveredID));
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
+		} else if (canvas.isonprogress()) {
+		    int mouseXonBar = ix - Layout_common.pos_progress_x;
+		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
+			    .getlength());
+		    EDMHouse.BGM.needjump = true;
 		}
 	    }
 
@@ -142,13 +147,14 @@ public class CFrame {
 		    double mouseXOnBar = e.getX() - Layout_common.pos_volume_x
 			    - (Res.hud_ki.getWidth() / 2);
 		    int volValue = (int) (mouseXOnBar
-			    / (Res.hud_volume.getWidth()-Res.hud_ki.getWidth()) * 100);
+			    / (Res.hud_volume.getWidth() - Res.hud_ki
+				    .getWidth()) * 100);
 		    if (volValue > 100)
 			volValue = 100;
 		    if (volValue < 0)
 			volValue = 0;
 		    canvas.volume = volValue;
-		    SoundMeter.setSystemVolume(((float)volValue)/100);
+		    SoundMeter.setSystemVolume(((float) volValue) / 100);
 		} else {
 		    if (isMouseInside) {
 			int xs = e.getXOnScreen();

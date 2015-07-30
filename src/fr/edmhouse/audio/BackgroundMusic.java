@@ -1,7 +1,5 @@
 package fr.edmhouse.audio;
 
-import java.io.FileInputStream;
-
 import fr.edmhouse.main.EDMHouse;
 
 /** An object that constently plays a BGM in the player. Can be paused and such */
@@ -14,12 +12,17 @@ public class BackgroundMusic implements Runnable {
     private CustomPlayer currentplayer;
     /** The current song being played (even if paused). */
     private Song currentsong;
-
     /**
      * is true if the Music is curently changing, preventing from playing or
      * pausing.
      */
     private boolean ischanging;
+    /**
+     * True if the user clicked the progressbar to jump. if this is set to true,
+     * the current player will skip/go back to the desired value and then set
+     * this value back to false.
+     */
+    public boolean needjump;
 
     /** Creates a BGM object. */
     public BackgroundMusic() {
@@ -27,6 +30,7 @@ public class BackgroundMusic implements Runnable {
 	this.currentsong = null;
 	this.ischanging = true;
 	this.changemusic(EDMHouse.songs.getRandomUrl());
+	this.needjump = false;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class BackgroundMusic implements Runnable {
 		    this.currentplayer.close();
 		    if (EDMHouse.frame.canvas.random_on)
 			this.changemusic(EDMHouse.songs.getRandomUrl());
-		    else 
+		    else
 			this.changemusic(EDMHouse.songs.getNextUrl());
 		}
 		this.currentplayer.play();
@@ -61,8 +65,7 @@ public class BackgroundMusic implements Runnable {
 	} catch (Exception e) {
 	}
 	try {
-	    FileInputStream fis = new FileInputStream(song.getfilepath());
-	    this.currentplayer = new CustomPlayer(fis);
+	    this.currentplayer = new CustomPlayer(song.getfilepath());
 	} catch (Exception e) {
 	    if (song.getfilepath() != null) {
 		System.err
