@@ -6,17 +6,29 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import fr.edmhouse.main.EDMHouse;
+import fr.edmhouse.main.SkinsHolder;
 import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
+import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
+import fr.edmhouse.res.ResLayout;
 
 public class CCanvas extends Canvas {
     private static final long serialVersionUID = 1L;
 
+    public static final int STATE_DEFAULT = 0;
+    public static final int STATE_LIST = 1;
+    public static final int STATE_OPTIONS = 2;
+    public static final int STATE_PLAYLISTS = 3;
+    public static final int STATE_SKINS = 4;
     /**
      * The content of the frame. <br/>
      * <strong>0 :</strong> the default play/pause overlay<br/>
-     * <strong>1 : </strong> the list of songs
+     * <strong>1 : </strong> the list of songs <strong>2 : </strong> the options
+     * menu <br/>
+     * <strong>2 :</strong> the options menu<br/>
+     * <strong>3 :</strong> the playlist/folder chooser screen<br/>
+     * <strong>4 :</strong> the skin list where you can select the skin you want<br/>
      */
     public int content;
     /** Is true if the random mode for song pickups is on. */
@@ -48,6 +60,7 @@ public class CCanvas extends Canvas {
 
     /** Additional, not required constructor part. */
     public void initialize() {
+	this.content = STATE_DEFAULT;
 	this.random_on = true;
 	this.state = true;
 	this.progression = 0;
@@ -59,15 +72,24 @@ public class CCanvas extends Canvas {
 
     @Override
     public void update(Graphics gr) {
-	if (this.content != 1)
+	if (this.content == STATE_DEFAULT || this.content == STATE_OPTIONS)
 	    this.listoffset = 0;
 	this.hoveredSongButtonID = -1;
 	switch (this.content) {
-	case 0:
+	case STATE_DEFAULT:
 	    this.updateCommon();
 	    break;
-	case 1:
+	case STATE_LIST:
 	    this.updateList();
+	    break;
+	case STATE_OPTIONS:
+	    this.updateOptions();
+	    break;
+	case STATE_PLAYLISTS:
+	    this.updatePlaylists();
+	    break;
+	case STATE_SKINS:
+	    this.updateSkins();
 	    break;
 	default:
 	    break;
@@ -87,6 +109,12 @@ public class CCanvas extends Canvas {
 	else
 	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
 		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
 	if (this.isonrandom())
 	    if (this.random_on)
 		g.drawImage(Res.hud_random_on_active,
@@ -182,13 +210,13 @@ public class CCanvas extends Canvas {
 	g.setColor(Layout_list.color_text);
 	g.setFont(Res.font);
 	this.listoffset += EDMHouse.frame.wheelvelocity;
-	if (this.listoffset < 0)
-	    this.listoffset = 0;
 	int maximumoffset = Layout_list.pos_componnent_y
 		+ (EDMHouse.songs.getSongAmmount() * Res.list_componnent
-			.getHeight()) - Layout_common.size_frame_height;
+			.getHeight()) - Res.background.getHeight();
 	if (this.listoffset > maximumoffset)
 	    this.listoffset = maximumoffset;
+	if (this.listoffset < 0)
+	    this.listoffset = 0;
 	for (int i = 0; i < EDMHouse.songs.getSongAmmount(); i++) {
 	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
 		    .getHeight() * i));
@@ -223,6 +251,12 @@ public class CCanvas extends Canvas {
 	} else
 	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
 		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
 	if (this.isonrandom()) {
 	    if (this.random_on)
 		g.drawImage(Res.hud_random_on_active,
@@ -255,16 +289,217 @@ public class CCanvas extends Canvas {
 	} else
 	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
 		    Layout_common.pos_skip_y, null);
-	g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
-		Layout_common.pos_volume_y, null);
-	int volpos = (int) (((float) this.volume)
-		* (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
-	if (this.isonvolume()) {
-	    g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x + volpos,
+
+	if (Layout_list.value_showvolume == ResLayout.TRUE) { // Draws the
+							      // volumebar.
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		    Layout_common.pos_volume_y, null);
-	} else {
-	    g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// Draws the list foreground
+	g.drawImage(Res.list_foreground, 0, 0, null);
+	// prints the buffer to the canvas
+	bs.show();
+	g.dispose();
+    }
+
+    private void updateOptions() {
+	BufferStrategy bs = this.getBufferStrategy();
+	Graphics g = bs.getDrawGraphics();
+	g.clearRect(0, 0, this.getWidth(), this.getWidth());
+	// Draws the background
+	g.drawImage(Res.options_background, 0, 0, null);
+	// Draws the buttons
+	if (this.isonoption_skin())
+	    g.drawImage(Res.options_skin_active,
+		    Layout_options.pos_option_skin_x,
+		    Layout_options.pos_option_skin_y, null);
+	else
+	    g.drawImage(Res.options_skin, Layout_options.pos_option_skin_x,
+		    Layout_options.pos_option_skin_y, null);
+	if (this.isonoption_songs())
+	    g.drawImage(Res.options_songs_active,
+		    Layout_options.pos_option_songs_x,
+		    Layout_options.pos_option_songs_y, null);
+	else
+	    g.drawImage(Res.options_songs, Layout_options.pos_option_songs_x,
+		    Layout_options.pos_option_songs_y, null);
+	// Draws the HUD
+	if (this.isonclose())
+	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	else
+	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	if (this.isonrandom())
+	    if (this.random_on)
+		g.drawImage(Res.hud_random_on_active,
+			Layout_common.pos_random_x, Layout_common.pos_random_y,
+			null);
+	    else
+		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
+			Layout_common.pos_random_y, null);
+	else if (this.random_on)
+	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	else
+	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	if (this.isonmini())
+	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	else
+	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	if (this.isonlist())
+	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	else
+	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	if (this.isonskip())
+	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	else
+	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	if (Layout_options.value_showvolume == ResLayout.TRUE) {
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// prints the buffer to the canvas
+	bs.show();
+	g.dispose();
+    }
+
+    private void updatePlaylists() {
+	// TODO : yolo
+    }
+
+    private void updateSkins() {
+	BufferStrategy bs = this.getBufferStrategy();
+	Graphics g = bs.getDrawGraphics();
+	g.clearRect(0, 0, this.getWidth(), this.getWidth());
+	// Draws the background
+	g.drawImage(Res.list_background, 0, 0, null);
+	// Draws the componnents
+	g.setColor(Layout_list.color_text);
+	g.setFont(Res.font);
+	this.listoffset += EDMHouse.frame.wheelvelocity;
+	int maximumoffset = Layout_list.pos_componnent_y
+		+ (SkinsHolder.skins.length * Res.list_componnent
+			.getHeight()) - Res.background.getHeight();
+	if (this.listoffset > maximumoffset)
+	    this.listoffset = maximumoffset;
+	if (this.listoffset < 0)
+	    this.listoffset = 0;
+	for (int i = 0; i < SkinsHolder.skins.length; i++) {
+	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		    .getHeight() * i));
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height, null);
+	    char[] skintitle = SkinsHolder.skins[i].getName().toCharArray();
+	    g.drawChars(skintitle, 0, skintitle.length, Layout_list.pos_text_x,
+		    height + Layout_list.pos_text_y);
+	    if (isMouseOnSwapInComponent(i)) {
+		g.drawImage(Res.list_swap_active, Layout_list.pos_componnent_x
+			+ Layout_list.pos_swap_x, height
+			+ Layout_list.pos_swap_y, null);
+		// this.hoveredSongButtonID = i;
+	    } else
+		g.drawImage(Res.list_swap, Layout_list.pos_componnent_x
+			+ Layout_list.pos_swap_x, height
+			+ Layout_list.pos_swap_y, null);
+	}
+	// Draws the scroll bar
+	int scroll_padding = Layout_list.size_slider_height / 10;
+	int scrollVerticalOffest = (int) (this.listoffset
+		* (Layout_list.size_slider_height - (scroll_padding) * 2) / maximumoffset);
+	g.setColor(Layout_list.color_scroll);
+	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
+		+ scrollVerticalOffest, 10, scroll_padding * 2);
+	// Draws the HUD
+	if (this.isonclose()) {
+	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	} else
+	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	if (this.isonrandom()) {
+	    if (this.random_on)
+		g.drawImage(Res.hud_random_on_active,
+			Layout_common.pos_random_x, Layout_common.pos_random_y,
+			null);
+	    else
+		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
+			Layout_common.pos_random_y, null);
+	} else if (this.random_on)
+	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	else
+	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	if (this.isonmini()) {
+	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	} else
+	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	if (this.isonlist()) {
+	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	} else
+	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	if (this.isonskip()) {
+	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	} else
+	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+
+	if (Layout_list.value_showvolume == ResLayout.TRUE) { // Draws the
+							      // volumebar.
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
+		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
 	}
 	// Draws the list foreground
 	g.drawImage(Res.list_foreground, 0, 0, null);
@@ -293,7 +528,7 @@ public class CCanvas extends Canvas {
 
     /**
      * Predicates that returns true if the mouse is hovering the play button in
-     * the container n.<code>containerNumber</code> in the list.
+     * the container n°<code>containerNumber</code> in the list.
      * <code>containerNumber</code> must start at 0.
      */
     public boolean isMouseOnPlayInComponent(int containerNumber) {
@@ -312,13 +547,34 @@ public class CCanvas extends Canvas {
     }
 
     /**
+     * Predicates that returns true if the mouse is hovering the swap button in
+     * the container n°<code>containerNumber</code> in the skin list.
+     * <code>containerNumber</code> must start at 0.
+     */
+    public boolean isMouseOnSwapInComponent(int containerNumber) {
+	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
+		|| this.isonmini() || this.isonrandom() || this.isonskip())
+	    return false;
+	int buttonheight = Layout_list.pos_componnent_y
+		+ Layout_list.pos_swap_y
+		+ (containerNumber * Res.list_componnent.getHeight())
+		- (int) this.listoffset;
+	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
+		+ Layout_list.pos_swap_x, buttonheight,
+		Layout_list.pos_componnent_x + Layout_list.pos_swap_x
+			+ Res.list_swap.getWidth(), buttonheight
+			+ Res.list_swap.getHeight()));
+    }
+
+    /**
      * Predicate that returns true if the mouse is hovering the scrollbar
-     * componnent and if the frame is in the list state.
+     * componnent and if the frame is in a list state.
      */
     public boolean isMouseOnScrollbar() {
+	if(this.content != STATE_LIST && this.content != STATE_SKINS)return false;
 	return (EDMHouse.frame.isOnPos(Layout_list.pos_slider_x,
 		Layout_list.pos_slider_y, Layout_list.pos_slider_x + 10,
-		Layout_list.pos_slider_y + Layout_list.size_slider_height) && this.content == 1);
+		Layout_list.pos_slider_y + Layout_list.size_slider_height));
     }
 
     /**
@@ -381,7 +637,7 @@ public class CCanvas extends Canvas {
      * in the play state only.
      */
     public boolean isonbutton() {
-	if (this.content != 0)
+	if (this.content != STATE_DEFAULT)
 	    return false;
 	return EDMHouse.frame.isOnPos(Layout_common.pos_button_x,
 		Layout_common.pos_button_y, Layout_common.pos_button_x
@@ -394,7 +650,7 @@ public class CCanvas extends Canvas {
      * play state only.
      */
     public boolean isonprogress() {
-	if (this.content != 0)
+	if (this.content != STATE_DEFAULT)
 	    return false;
 	return EDMHouse.frame.isOnPos(Layout_common.pos_progress_x,
 		Layout_common.pos_progress_y, Layout_common.pos_progress_x
@@ -408,9 +664,58 @@ public class CCanvas extends Canvas {
      * state.
      */
     public boolean isonvolume() {
+	if (this.content == STATE_LIST && Layout_list.value_showvolume == 0)
+	    return false;
+	if (this.content == STATE_OPTIONS
+		&& Layout_options.value_showvolume == 0)
+	    return false;
 	return EDMHouse.frame.isOnPos(Layout_common.pos_volume_x,
 		Layout_common.pos_volume_y, Layout_common.pos_volume_x
 			+ Res.hud_volume.getWidth(), Layout_common.pos_volume_y
 			+ Res.hud_volume.getHeight());
+    }
+
+    /**
+     * predicate that returns true if the mouse is over the options button, in
+     * any state.
+     */
+    public boolean isonoptions() {
+	return EDMHouse.frame.isOnPos(Layout_common.pos_options_x,
+		Layout_common.pos_options_y, Layout_common.pos_options_x
+			+ Res.hud_options.getWidth(),
+		Layout_common.pos_options_y + Res.hud_options.getHeight());
+    }
+
+    /**
+     * predicate that returns true if the mouse is over the option_songs button,
+     * in the options state only.
+     */
+    public boolean isonoption_songs() {
+	if (this.content != STATE_OPTIONS)
+	    return false;
+	return EDMHouse.frame.isOnPos(
+		Layout_options.pos_option_songs_x,
+		Layout_options.pos_option_songs_y,
+		Layout_options.pos_option_songs_x
+			+ Res.options_songs.getWidth(),
+		Layout_options.pos_option_songs_y
+			+ Res.options_songs.getHeight());
+    }
+
+    /**
+     * predicate that returns true if the mouse is over the option_skin button,
+     * in the options state only.
+     */
+    public boolean isonoption_skin() {
+	if (this.content != STATE_OPTIONS)
+	    return false;
+	return EDMHouse.frame
+		.isOnPos(
+			Layout_options.pos_option_skin_x,
+			Layout_options.pos_option_skin_y,
+			Layout_options.pos_option_skin_x
+				+ Res.options_skin.getWidth(),
+			Layout_options.pos_option_skin_y
+				+ Res.options_skin.getHeight());
     }
 }

@@ -16,12 +16,15 @@ import fr.edmhouse.main.Crashframe;
  */
 public class Res {
 
-    /** Path to the main project folder. Should be null in the final product. */
+    /** Path to the main project folder. Should be empty in the final product. */
     public static final String FOLDER_PATH = "C:\\Users\\Darkxell_mc\\Desktop\\EDMhouse\\";
     // public static final String FOLDER_PATH = "";
     // TODO : switch this when relasing.
 
-    /** Boolean that is true ONLY if the images are loaded */
+    /**
+     * Boolean that is true ONLY if the images are loaded. Should be left
+     * untouched from outside this class.
+     */
     public static boolean isInitialized;
 
     /** The font used in the frame. */
@@ -48,6 +51,8 @@ public class Res {
     public static BufferedImage hud_volume;
     public static BufferedImage hud_ki;
     public static BufferedImage hud_ki_active;
+    public static BufferedImage hud_options;
+    public static BufferedImage hud_options_active;
 
     public static BufferedImage hud_play;
     public static BufferedImage hud_pause;
@@ -57,9 +62,18 @@ public class Res {
     /* The images used in the list */
     public static BufferedImage list_play;
     public static BufferedImage list_play_active;
+    public static BufferedImage list_swap;
+    public static BufferedImage list_swap_active;
     public static BufferedImage list_componnent;
     public static BufferedImage list_background;
     public static BufferedImage list_foreground;
+
+    /* The images used in the option menu */
+    public static BufferedImage options_background;
+    public static BufferedImage options_songs;
+    public static BufferedImage options_songs_active;
+    public static BufferedImage options_skin;
+    public static BufferedImage options_skin_active;
 
     /** Initializes all the images and the font from the ressources folder. */
     public static void initialize() {
@@ -103,13 +117,13 @@ public class Res {
 		foreground = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\common\\foreground.png"));
 		hud_cross_red = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\cross_red.png"));
+			+ "ressources\\cross_active.png"));
 		hud_cross_white = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\cross_white.png"));
+			+ "ressources\\cross.png"));
 		hud_mini_grey = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\mini_grey.png"));
+			+ "ressources\\mini_active.png"));
 		hud_mini_white = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\mini_white.png"));
+			+ "ressources\\mini.png"));
 		hud_play = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\common\\hud_play.png"));
 		hud_pause = ImageIO.read(new File(FOLDER_PATH
@@ -119,27 +133,31 @@ public class Res {
 		hud_pause_active = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\common\\hud_pause_active.png"));
 		hud_random = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\random_white.png"));
+			+ "ressources\\random.png"));
 		hud_random_active = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\random_grey.png"));
+			+ "ressources\\random_active.png"));
 		hud_random_on = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\random_white_on.png"));
+			+ "ressources\\random_on.png"));
 		hud_random_on_active = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\random_grey_on.png"));
+			+ "ressources\\random_active_on.png"));
 		hud_list = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\list_white.png"));
+			+ "ressources\\list.png"));
 		hud_list_active = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\list_grey.png"));
+			+ "ressources\\list_active.png"));
 		hud_skip = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\skip_white.png"));
+			+ "ressources\\skip.png"));
 		hud_skip_active = ImageIO.read(new File(FOLDER_PATH
-			+ "ressources\\skip_grey.png"));
+			+ "ressources\\skip_active.png"));
 		hud_volume = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\volume.png"));
 		hud_ki = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\volume_ki.png"));
 		hud_ki_active = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\volume_ki_active.png"));
+		hud_options = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options.png"));
+		hud_options_active = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options_active.png"));
 
 		/* list starts here */
 
@@ -147,12 +165,30 @@ public class Res {
 			+ "ressources\\list\\play.png"));
 		list_play_active = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\list\\play_active.png"));
+		list_swap = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\list\\swap.png"));
+		list_swap_active = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\list\\swap_active.png"));
 		list_componnent = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\list\\container.png"));
 		list_background = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\list\\background.png"));
 		list_foreground = ImageIO.read(new File(FOLDER_PATH
 			+ "ressources\\list\\foreground.png"));
+
+		/* options starts here */
+
+		options_background = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options\\background.png"));
+		options_songs = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options\\option_songs.png"));
+		options_songs_active = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options\\option_songs_active.png"));
+		options_skin = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options\\option_skin.png"));
+		options_skin_active = ImageIO.read(new File(FOLDER_PATH
+			+ "ressources\\options\\option_skin_active.png"));
+
 		isInitialized = true;
 	    } catch (Exception e) {
 		Crashframe cf = new Crashframe(
@@ -195,11 +231,20 @@ public class Res {
 	hud_volume = null;
 	hud_ki = null;
 	hud_ki_active = null;
+	hud_options = null;
+	hud_options_active = null;
 	list_play = null;
 	list_play_active = null;
+	list_swap = null;
+	list_swap_active = null;
 	list_componnent = null;
 	list_background = null;
 	list_foreground = null;
+	options_background = null;
+	options_songs = null;
+	options_songs_active = null;
+	options_skin = null;
+	options_skin_active = null;
 	isInitialized = false;
     }
 }

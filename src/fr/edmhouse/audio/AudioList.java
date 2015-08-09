@@ -40,7 +40,10 @@ public class AudioList {
 	return this.songs[rand];
     }
 
-    /** Gets the next mp3 file url from the list. Records the pick. */
+    /**
+     * Gets the next mp3 file url from the list. Records the pick. if the last
+     * picked one was the last one on the list, returns the first one.
+     */
     public Song getNextUrl() {
 	try {
 	    this.lastindex++;

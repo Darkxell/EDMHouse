@@ -6,6 +6,7 @@ import fr.edmhouse.audio.SoundMeter;
 import fr.edmhouse.display.CFrame;
 import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
+import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
 
 public class EDMHouse {
@@ -22,16 +23,19 @@ public class EDMHouse {
     /** The thread containing the audio player */
     public static Thread bgmthread;
 
-    /** Main method. */
+    /** Main method. Called from the .jar scource. */
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
 	Layout_common.initializeFromFile(Res.FOLDER_PATH
 		+ "ressources\\common\\layout.edm");
 	Layout_list.initializeFromFile(Res.FOLDER_PATH
 		+ "ressources\\list\\layout.edm");
+	Layout_options.initializeFromFile(Res.FOLDER_PATH
+		+ "ressources\\options\\layout.edm");
 	Res.initialize();
 	frame = new CFrame();
 	songs = new AudioList(Res.FOLDER_PATH + "songs");
+	SkinsHolder.initialize();
 	BGM = new BackgroundMusic();
 	Thread t = new Thread(BGM);
 	bgmthread = t;

@@ -22,6 +22,8 @@ public class Layout_common implements ResLayout {
     public static int pos_list_y = 0;
     public static int pos_skip_x = 0;
     public static int pos_skip_y = 0;
+    public static int pos_options_x = 0;
+    public static int pos_options_y = 0;
     public static int pos_random_x = 0;
     public static int pos_random_y = 0;
     public static int pos_button_x = 0;
@@ -37,8 +39,6 @@ public class Layout_common implements ResLayout {
     public static float size_text = 0;
     public static int size_progress_height = 0;
     public static int size_progress_width = 0;
-    public static int size_frame_height = 0;
-    public static int size_frame_width = 0;
     public static float size_textoffset = 0;
     /* Colors */
     public static Color color_progress = null;
@@ -100,6 +100,10 @@ public class Layout_common implements ResLayout {
 		pos_button_y = value;
 	    } else if (array[i].startsWith("pos_volume_x(")) {
 		pos_volume_x = value;
+	    } if (array[i].startsWith("pos_options_x(")) {
+		 pos_options_x = value;
+	    } if (array[i].startsWith("pos_options_y(")) {
+		 pos_options_y = value;
 	    } else if (array[i].startsWith("pos_volume_y(")) {
 		pos_volume_y = value;
 	    } else if (array[i].startsWith("pos_progress_x(")) {
@@ -116,10 +120,6 @@ public class Layout_common implements ResLayout {
 		size_progress_height = value;
 	    } else if (array[i].startsWith("size_progress_width(")) {
 		size_progress_width = value;
-	    } else if (array[i].startsWith("size_frame_height(")) {
-		size_frame_height = value;
-	    } else if (array[i].startsWith("size_frame_width(")) {
-		size_frame_width = value;
 	    } else if (array[i].startsWith("size_textoffset(")) {
 		size_textoffset = ((float) value) / 100;
 	    } else if (array[i].startsWith("color_progress_red(")) {

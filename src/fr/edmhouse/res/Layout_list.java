@@ -8,12 +8,14 @@ import fr.edmhouse.main.Crashframe;
 import fr.edmhouse.main.StringMatcher;
 
 public class Layout_list implements ResLayout {
-
+    
     /* List componnents positions */
     public static int pos_componnent_x = 0;
     public static int pos_componnent_y = 0;
     public static int pos_play_x = 0;
     public static int pos_play_y = 0;
+    public static int pos_swap_x = 0;
+    public static int pos_swap_y = 0;
     public static int pos_text_x = 0;
     public static int pos_text_y = 0;
     public static int pos_slider_x = 0;
@@ -24,7 +26,9 @@ public class Layout_list implements ResLayout {
     /* Colors */
     public static Color color_scroll = null;
     public static Color color_text = null;
-
+    /* Other values */
+    public static int value_showvolume = FALSE;
+    
     public static void initializeFromFile(String filepath) {
 	String filestring = "";
 	StringBuilder builder = new StringBuilder();
@@ -53,7 +57,6 @@ public class Layout_list implements ResLayout {
 	    } catch (Exception e) {
 		value = 0;
 	    }
-
 	    if (array[i].startsWith("pos_component_x(")) {
 		pos_componnent_x = value;
 	    } else if (array[i].startsWith("pos_component_y(")) {
@@ -66,6 +69,10 @@ public class Layout_list implements ResLayout {
 		pos_play_x = value;
 	    } else if (array[i].startsWith("pos_play_y(")) {
 		pos_play_y = value;
+	    } else if (array[i].startsWith("pos_swap_x(")) {
+		pos_swap_x = value;
+	    } else if (array[i].startsWith("pos_swap_y(")) {
+		pos_swap_y = value;
 	    } else if (array[i].startsWith("pos_text_x(")) {
 		pos_text_x = value;
 	    } else if (array[i].startsWith("pos_text_y(")) {
@@ -90,6 +97,8 @@ public class Layout_list implements ResLayout {
 		color_b1 = value;
 	    } else if (array[i].startsWith("color_text_alpha(")) {
 		color_a1 = value;
+	    } else if (array[i].startsWith("value_showvolume(")) {
+		value_showvolume = value;
 	    }
 	}
 	color_scroll = new Color(color_r, color_g, color_b, color_a);

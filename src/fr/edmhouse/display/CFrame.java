@@ -1,14 +1,20 @@
 package fr.edmhouse.display;
 
+import java.awt.Component;
 import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
 
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
+import fr.edmhouse.audio.AudioList;
 import fr.edmhouse.audio.SoundMeter;
 import fr.edmhouse.main.EDMHouse;
 import fr.edmhouse.res.Layout_common;
@@ -48,8 +54,8 @@ public class CFrame {
 	this.frame.setResizable(false);
 	this.frame.setUndecorated(true);
 	this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.frame.setSize(Layout_common.size_frame_width,
-		Layout_common.size_frame_height);
+	this.frame.setSize(Res.background.getWidth(),
+		Res.background.getHeight());
 	this.frame.setLocationRelativeTo(null);
 	this.frame.setIconImage(Res.icon);
 	this.frame.setTitle("EDMhouse");
@@ -58,8 +64,8 @@ public class CFrame {
 	// this.frame.setLayout(new BorderLayout());
 	// TODO : Work on this later on.
 	this.canvas = new CCanvas();
-	this.canvas.setSize(Layout_common.size_frame_width,
-		Layout_common.size_frame_height);
+	this.canvas.setSize(Res.background.getWidth(),
+		Res.background.getHeight());
 	this.frame.add(this.canvas);
 	this.canvas.addMouseListener(new MouseListener() {
 	    @SuppressWarnings("deprecation")
@@ -89,10 +95,15 @@ public class CFrame {
 		} else if (canvas.isonrandom())
 		    canvas.random_on = !canvas.random_on;
 		else if (canvas.isonlist())
-		    if (canvas.content == 0)
-			canvas.content = 1;
+		    if (canvas.content != CCanvas.STATE_LIST)
+			canvas.content = CCanvas.STATE_LIST;
 		    else
-			canvas.content = 0;
+			canvas.content = CCanvas.STATE_DEFAULT;
+		else if (canvas.isonoptions())
+		    if (canvas.content != CCanvas.STATE_OPTIONS)
+			canvas.content = CCanvas.STATE_OPTIONS;
+		    else
+			canvas.content = CCanvas.STATE_DEFAULT;
 		else if (hoveredID != -1) {
 		    EDMHouse.bgmthread.resume();
 		    EDMHouse.BGM.instantstop();
@@ -105,6 +116,27 @@ public class CFrame {
 		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
 			    .getlength());
 		    EDMHouse.BGM.needjump = true;
+		} else if (canvas.isonoption_songs()) {
+		    // Pretty simple for what it does right? ^^
+		    JFileChooser fileChooser = new JFileChooser() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected JDialog createDialog(Component parent)
+				throws HeadlessException {
+			    JDialog dialog = super.createDialog(parent);
+			    dialog.setIconImage(Res.icon);
+			    return dialog;
+			}
+		    };
+		    fileChooser
+			    .setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		    if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+			File folder = fileChooser.getSelectedFile();
+			EDMHouse.songs = new AudioList(folder.getAbsolutePath());
+		    }
+		} else if (canvas.isonoption_skin()) {
+		    canvas.content = CCanvas.STATE_SKINS;
 		}
 	    }
 
@@ -141,7 +173,7 @@ public class CFrame {
 		    double maximumListOffset = Layout_list.pos_componnent_y
 			    + (EDMHouse.songs.getSongAmmount() * Res.list_componnent
 				    .getHeight())
-			    - Layout_common.size_frame_height;
+			    - Res.background.getHeight();
 		    canvas.listoffset = (int) ((mouseYOnBar / (Layout_list.size_slider_height * 0.8)) * maximumListOffset);
 		} else if (canvas.isonvolume()) {
 		    double mouseXOnBar = e.getX() - Layout_common.pos_volume_x
@@ -213,5 +245,14 @@ public class CFrame {
     /** predicate that returns true if the frame is visible (not iconified). */
     public boolean isVisible() {
 	return (this.frame.getExtendedState() != JFrame.ICONIFIED);
+    }
+
+    /**
+     * Changes the size of the frame the the desired value. Be aware that using
+     * this method to change the frame size to a bigger value than the
+     * background will result in grey borders.
+     */
+    public void changeSize(int width, int height) {
+	this.frame.setSize(width, height);
     }
 }
