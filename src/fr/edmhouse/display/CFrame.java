@@ -39,6 +39,8 @@ public class CFrame {
      * The y positon of the mouse on the frame. is 0 if the mouse is not inside.
      */
     private int iy;
+    /** A transparent JFrame representing shadows for the current frame. */
+    private ShadowWindow shadows;
     /** The Jframe object used to display stuff. Should be left untouched. */
     private JFrame frame;
     /** The canvas object used in the frame. */
@@ -59,10 +61,10 @@ public class CFrame {
 	this.frame.setLocationRelativeTo(null);
 	this.frame.setIconImage(Res.icon);
 	this.frame.setTitle("EDMhouse");
-	// this.frame.setBackground(new Color(0, 0, 0, 0));
-	// this.frame.setContentPane(new ShadowPane());
-	// this.frame.setLayout(new BorderLayout());
-	// TODO : Work on this later on.
+
+	this.shadows = new ShadowWindow();
+	this.shadows.setVisible(true);
+
 	this.canvas = new CCanvas();
 	this.canvas.setSize(Res.background.getWidth(),
 		Res.background.getHeight());
@@ -142,6 +144,8 @@ public class CFrame {
 
 	    @Override
 	    public void mousePressed(MouseEvent e) {
+		shadows.setVisible(true);
+		frame.setVisible(true);
 	    }
 
 	    @Override
@@ -172,8 +176,7 @@ public class CFrame {
 			    - (Layout_list.pos_slider_y + (Layout_list.size_slider_height / 10));
 		    double maximumListOffset = Layout_list.pos_componnent_y
 			    + (EDMHouse.songs.getSongAmmount() * Res.list_componnent
-				    .getHeight())
-			    - Res.background.getHeight();
+				    .getHeight()) - Res.background.getHeight();
 		    canvas.listoffset = (int) ((mouseYOnBar / (Layout_list.size_slider_height * 0.8)) * maximumListOffset);
 		} else if (canvas.isonvolume()) {
 		    double mouseXOnBar = e.getX() - Layout_common.pos_volume_x
@@ -191,6 +194,7 @@ public class CFrame {
 		    if (isMouseInside) {
 			int xs = e.getXOnScreen();
 			int ys = e.getYOnScreen();
+			shadows.setLocation(xs - ix - 10, ys - iy - 10);
 			frame.setLocation(xs - ix, ys - iy);
 		    }
 		}
@@ -218,8 +222,14 @@ public class CFrame {
 	if (!this.canvas.state)
 	    this.canvas.progression += 10;
 	if (this.isVisible()) {
+	    if (!this.shadows.isVisible()) {
+		shadows.setVisible(true);
+		frame.setVisible(true);
+	    }
 	    Res.restore();
 	    this.canvas.update(this.canvas.getGraphics());
+	} else {
+	    shadows.setVisible(false);
 	}
     }
 
@@ -254,5 +264,6 @@ public class CFrame {
      */
     public void changeSize(int width, int height) {
 	this.frame.setSize(width, height);
+	this.shadows.setSize(width + 20, height + 20);
     }
 }
