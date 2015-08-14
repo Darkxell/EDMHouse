@@ -13,6 +13,9 @@ public class Layout_options implements ResLayout {
     public static int pos_option_songs_y = 0;
     public static int pos_option_skin_x = 0;
     public static int pos_option_skin_y = 0;
+    public static int pos_back_x = 0;
+    public static int pos_back_y = 0;
+    
     /* Other values */
     public static int value_showvolume = FALSE;
 
@@ -54,6 +57,10 @@ public class Layout_options implements ResLayout {
 		pos_option_skin_y = value;
 	    }  else if (array[i].startsWith("value_showvolume(")) {
 		value_showvolume = value;
+	    }  else if (array[i].startsWith("pos_back_y(")) {
+		pos_back_y = value;
+	    }  else if (array[i].startsWith("pos_back_x(")) {
+		pos_back_x = value;
 	    }
 	}
     }

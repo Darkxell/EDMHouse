@@ -20,6 +20,8 @@ public class Layout_list implements ResLayout {
     public static int pos_text_y = 0;
     public static int pos_slider_x = 0;
     public static int pos_slider_y = 0;
+    public static int pos_back_x = 0;
+    public static int pos_back_y = 0;
     /* List items sizes */
     public static float size_textoffset = 0;
     public static int size_slider_height = 0;
@@ -77,6 +79,10 @@ public class Layout_list implements ResLayout {
 		pos_text_x = value;
 	    } else if (array[i].startsWith("pos_text_y(")) {
 		pos_text_y = value;
+	    }  else if (array[i].startsWith("pos_back_y(")) {
+		pos_back_y = value;
+	    }  else if (array[i].startsWith("pos_back_x(")) {
+		pos_back_x = value;
 	    } else if (array[i].startsWith("size_textoffset(")) {
 		size_textoffset = value;
 	    } else if (array[i].startsWith("size_slider_height(")) {

@@ -48,6 +48,11 @@ public class CCanvas extends Canvas {
      * hovered or if you are not in the list.
      */
     public int hoveredSongButtonID;
+    /**
+     * The hovered swap button id in the skin list. Is -1 if no swap button is
+     * hovered or if you are not in the skin list.
+     */
+    public int hoveredSwapButtonID;
 
     /**
      * Override paint method. Reinitializes the canvas to loading screen if
@@ -74,7 +79,11 @@ public class CCanvas extends Canvas {
     public void update(Graphics gr) {
 	if (this.content == STATE_DEFAULT || this.content == STATE_OPTIONS)
 	    this.listoffset = 0;
-	this.hoveredSongButtonID = -1;
+	this.hoveredSongButtonID = -1; // TODO : fix this. This makes that
+				       // sometimes you click between two
+				       // updates and the hoveredsongID is -1
+				       // where it should have a positive value.
+	this.hoveredSwapButtonID = -1; // TODO : same here.
 	switch (this.content) {
 	case STATE_DEFAULT:
 	    this.updateCommon();
@@ -290,8 +299,8 @@ public class CCanvas extends Canvas {
 	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
 		    Layout_common.pos_skip_y, null);
 
-	if (Layout_list.value_showvolume == ResLayout.TRUE) { // Draws the
-							      // volumebar.
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar.
 	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		    Layout_common.pos_volume_y, null);
 	    int volpos = (int) (((float) this.volume)
@@ -303,6 +312,14 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
 			Layout_common.pos_volume_y, null);
 	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
 	}
 	// Draws the list foreground
 	g.drawImage(Res.list_foreground, 0, 0, null);
@@ -378,6 +395,7 @@ public class CCanvas extends Canvas {
 	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
 		    Layout_common.pos_skip_y, null);
 	if (Layout_options.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar if needed
 	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		    Layout_common.pos_volume_y, null);
 	    int volpos = (int) (((float) this.volume)
@@ -389,6 +407,14 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
 			Layout_common.pos_volume_y, null);
 	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_options.pos_back_x,
+		    Layout_options.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_options.pos_back_x,
+		    Layout_options.pos_back_y, null);
 	}
 	// prints the buffer to the canvas
 	bs.show();
@@ -410,8 +436,8 @@ public class CCanvas extends Canvas {
 	g.setFont(Res.font);
 	this.listoffset += EDMHouse.frame.wheelvelocity;
 	int maximumoffset = Layout_list.pos_componnent_y
-		+ (SkinsHolder.skins.length * Res.list_componnent
-			.getHeight()) - Res.background.getHeight();
+		+ (SkinsHolder.skins.length * Res.list_componnent.getHeight())
+		- Res.background.getHeight();
 	if (this.listoffset > maximumoffset)
 	    this.listoffset = maximumoffset;
 	if (this.listoffset < 0)
@@ -428,7 +454,7 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.list_swap_active, Layout_list.pos_componnent_x
 			+ Layout_list.pos_swap_x, height
 			+ Layout_list.pos_swap_y, null);
-		// this.hoveredSongButtonID = i;
+		this.hoveredSwapButtonID = i;
 	    } else
 		g.drawImage(Res.list_swap, Layout_list.pos_componnent_x
 			+ Layout_list.pos_swap_x, height
@@ -487,8 +513,8 @@ public class CCanvas extends Canvas {
 	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
 		    Layout_common.pos_skip_y, null);
 
-	if (Layout_list.value_showvolume == ResLayout.TRUE) { // Draws the
-							      // volumebar.
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar if needed.
 	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		    Layout_common.pos_volume_y, null);
 	    int volpos = (int) (((float) this.volume)
@@ -500,6 +526,14 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
 			Layout_common.pos_volume_y, null);
 	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
 	}
 	// Draws the list foreground
 	g.drawImage(Res.list_foreground, 0, 0, null);
@@ -571,7 +605,8 @@ public class CCanvas extends Canvas {
      * componnent and if the frame is in a list state.
      */
     public boolean isMouseOnScrollbar() {
-	if(this.content != STATE_LIST && this.content != STATE_SKINS)return false;
+	if (this.content != STATE_LIST && this.content != STATE_SKINS)
+	    return false;
 	return (EDMHouse.frame.isOnPos(Layout_list.pos_slider_x,
 		Layout_list.pos_slider_y, Layout_list.pos_slider_x + 10,
 		Layout_list.pos_slider_y + Layout_list.size_slider_height));
@@ -630,6 +665,27 @@ public class CCanvas extends Canvas {
 		Layout_common.pos_mini_y, Layout_common.pos_mini_x
 			+ Res.hud_mini_white.getWidth(),
 		Layout_common.pos_mini_y + Res.hud_mini_white.getHeight());
+    }
+
+    /**
+     * predicate that returns true if the mouse is over the back button,
+     * depending on the state of the frame. Always returns false if the canvas
+     * content is the default state.
+     */
+    public boolean isonback() {
+
+	if (this.content == STATE_LIST || this.content == STATE_SKINS
+		|| this.content == STATE_PLAYLISTS)
+	    return EDMHouse.frame.isOnPos(Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, Layout_list.pos_back_x
+			    + Res.hud_back.getWidth(), Layout_list.pos_back_y
+			    + Res.hud_back.getHeight());
+	if (this.content == STATE_OPTIONS)
+	    return EDMHouse.frame.isOnPos(Layout_options.pos_back_x,
+		    Layout_options.pos_back_y, Layout_options.pos_back_x
+			    + Res.hud_back.getWidth(),
+		    Layout_options.pos_back_y + Res.hud_back.getHeight());
+	return false;
     }
 
     /**

@@ -17,8 +17,10 @@ import javax.swing.JFrame;
 import fr.edmhouse.audio.AudioList;
 import fr.edmhouse.audio.SoundMeter;
 import fr.edmhouse.main.EDMHouse;
+import fr.edmhouse.main.SkinsHolder;
 import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
+import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
 
 public class CFrame {
@@ -74,6 +76,7 @@ public class CFrame {
 	    @Override
 	    public void mouseReleased(MouseEvent e) {
 		int hoveredID = canvas.hoveredSongButtonID;
+		int hoveredID2 = canvas.hoveredSwapButtonID;
 		if (canvas.isonclose())
 		    System.exit(0);
 		else if (canvas.isonmini()) {
@@ -96,7 +99,9 @@ public class CFrame {
 			EDMHouse.bgmthread.suspend();
 		} else if (canvas.isonrandom())
 		    canvas.random_on = !canvas.random_on;
-		else if (canvas.isonlist())
+		else if (canvas.isonback()) {
+		    canvas.content = CCanvas.STATE_DEFAULT;
+		} else if (canvas.isonlist())
 		    if (canvas.content != CCanvas.STATE_LIST)
 			canvas.content = CCanvas.STATE_LIST;
 		    else
@@ -113,6 +118,23 @@ public class CFrame {
 			    .getWantedUrl(hoveredID));
 		    if (canvas.state)
 			EDMHouse.bgmthread.suspend();
+		} else if (hoveredID2 != -1) {
+		    Res.currentSkinPath = SkinsHolder.skins[hoveredID2]
+			    .getFilepath() + "\\";
+		    Res.initialize();
+		    Layout_common.initializeFromFile(Res.currentSkinPath
+			    + "common\\layout.edm");
+		    Layout_list.initializeFromFile(Res.currentSkinPath
+			    + "list\\layout.edm");
+		    Layout_options.initializeFromFile(Res.currentSkinPath
+			    + "options\\layout.edm");
+		    frame.setSize(Res.background.getWidth(),
+			    Res.background.getHeight());
+		    canvas.setSize(Res.background.getWidth(),
+			    Res.background.getHeight());
+		    shadows.setSize(Res.background.getWidth() + 20,
+			    Res.background.getHeight() + 20);
+		    frame.setIconImage(Res.icon);
 		} else if (canvas.isonprogress()) {
 		    int mouseXonBar = ix - Layout_common.pos_progress_x;
 		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
