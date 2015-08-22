@@ -79,11 +79,10 @@ public class CCanvas extends Canvas {
     public void update(Graphics gr) {
 	if (this.content == STATE_DEFAULT || this.content == STATE_OPTIONS)
 	    this.listoffset = 0;
-	this.hoveredSongButtonID = -1; // TODO : fix this. This makes that
-				       // sometimes you click between two
-				       // updates and the hoveredsongID is -1
-				       // where it should have a positive value.
-	this.hoveredSwapButtonID = -1; // TODO : same here.
+	if (this.content != STATE_LIST)
+	    this.hoveredSongButtonID = -1;
+	if (this.content != STATE_SKINS)
+	    this.hoveredSwapButtonID = -1;
 	switch (this.content) {
 	case STATE_DEFAULT:
 	    this.updateCommon();
@@ -171,7 +170,8 @@ public class CCanvas extends Canvas {
 	g.setColor(Layout_common.color_progress);
 	int progress = (int) (((float) ((float) this.progression / (float) EDMHouse.BGM
 		.getlength())) * Layout_common.size_progress_width);
-	g.fillRect(41, 60, progress, Layout_common.size_progress_height);
+	g.fillRect(Layout_common.pos_progress_x, Layout_common.pos_progress_y,
+		progress, Layout_common.size_progress_height);
 	// Draws the play/pause button
 	if (this.state) {
 	    if (this.isonbutton())
@@ -226,6 +226,7 @@ public class CCanvas extends Canvas {
 	    this.listoffset = maximumoffset;
 	if (this.listoffset < 0)
 	    this.listoffset = 0;
+	int temphover = -1;
 	for (int i = 0; i < EDMHouse.songs.getSongAmmount(); i++) {
 	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
 		    .getHeight() * i));
@@ -239,12 +240,13 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.list_play_active, Layout_list.pos_componnent_x
 			+ Layout_list.pos_play_x, height
 			+ Layout_list.pos_play_y, null);
-		this.hoveredSongButtonID = i;
+		temphover = i;
 	    } else
 		g.drawImage(Res.list_play, Layout_list.pos_componnent_x
 			+ Layout_list.pos_play_x, height
 			+ Layout_list.pos_play_y, null);
 	}
+	this.hoveredSongButtonID = temphover;
 	// Draws the scroll bar
 	int scroll_padding = Layout_list.size_slider_height / 10;
 	int scrollVerticalOffest = (int) (this.listoffset
@@ -442,6 +444,7 @@ public class CCanvas extends Canvas {
 	    this.listoffset = maximumoffset;
 	if (this.listoffset < 0)
 	    this.listoffset = 0;
+	int temphover = -1;
 	for (int i = 0; i < SkinsHolder.skins.length; i++) {
 	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
 		    .getHeight() * i));
@@ -454,12 +457,13 @@ public class CCanvas extends Canvas {
 		g.drawImage(Res.list_swap_active, Layout_list.pos_componnent_x
 			+ Layout_list.pos_swap_x, height
 			+ Layout_list.pos_swap_y, null);
-		this.hoveredSwapButtonID = i;
+		temphover = i;
 	    } else
 		g.drawImage(Res.list_swap, Layout_list.pos_componnent_x
 			+ Layout_list.pos_swap_x, height
 			+ Layout_list.pos_swap_y, null);
 	}
+	this.hoveredSwapButtonID = temphover;
 	// Draws the scroll bar
 	int scroll_padding = Layout_list.size_slider_height / 10;
 	int scrollVerticalOffest = (int) (this.listoffset

@@ -121,6 +121,7 @@ public class CFrame {
 		} else if (hoveredID2 != -1) {
 		    Res.currentSkinPath = SkinsHolder.skins[hoveredID2]
 			    .getFilepath() + "\\";
+		    Res.isInitialized = false;
 		    Res.initialize();
 		    Layout_common.initializeFromFile(Res.currentSkinPath
 			    + "common\\layout.edm");
