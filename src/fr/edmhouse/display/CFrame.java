@@ -162,6 +162,8 @@ public class CFrame {
 		    }
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
+		} else if (canvas.isonoption_playlists()) {
+		    canvas.content = CCanvas.STATE_PLAYLISTS;
 		}
 	    }
 

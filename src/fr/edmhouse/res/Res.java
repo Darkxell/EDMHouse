@@ -71,6 +71,10 @@ public class Res {
     /* The images used in the list */
     public static BufferedImage list_play;
     public static BufferedImage list_play_active;
+    public static BufferedImage list_select;
+    public static BufferedImage list_select_active;
+    public static BufferedImage list_edit;
+    public static BufferedImage list_edit_active;
     public static BufferedImage list_swap;
     public static BufferedImage list_swap_active;
     public static BufferedImage list_componnent;
@@ -83,6 +87,8 @@ public class Res {
     public static BufferedImage options_songs_active;
     public static BufferedImage options_skin;
     public static BufferedImage options_skin_active;
+    public static BufferedImage options_playlists;
+    public static BufferedImage options_playlists_active;
 
     /** Initializes all the images and the font from the ressources folder. */
     public static void initialize() {
@@ -172,6 +178,14 @@ public class Res {
 			+ "list\\play.png"));
 		list_play_active = ImageIO.read(new File(currentSkinPath
 			+ "list\\play_active.png"));
+		list_select = ImageIO.read(new File(currentSkinPath
+			+ "list\\select.png"));
+		list_select_active = ImageIO.read(new File(currentSkinPath
+			+ "list\\select_active.png"));
+		list_edit = ImageIO.read(new File(currentSkinPath
+			+ "list\\edit.png"));
+		list_edit_active = ImageIO.read(new File(currentSkinPath
+			+ "list\\edit_active.png"));
 		list_swap = ImageIO.read(new File(currentSkinPath
 			+ "list\\swap.png"));
 		list_swap_active = ImageIO.read(new File(currentSkinPath
@@ -195,6 +209,10 @@ public class Res {
 			+ "options\\option_skin.png"));
 		options_skin_active = ImageIO.read(new File(currentSkinPath
 			+ "options\\option_skin_active.png"));
+		options_playlists = ImageIO.read(new File(currentSkinPath
+			+ "options\\option_playlists.png"));
+		options_playlists_active = ImageIO.read(new File(currentSkinPath
+			+ "options\\option_playlists_active.png"));
 
 		isInitialized = true;
 	    } catch (Exception e) {
@@ -244,6 +262,10 @@ public class Res {
 	hud_back_active = null;
 	list_play = null;
 	list_play_active = null;
+	list_select = null;
+	list_select_active = null;
+	list_edit = null;
+	list_edit_active = null;
 	list_swap = null;
 	list_swap_active = null;
 	list_componnent = null;
@@ -254,6 +276,8 @@ public class Res {
 	options_songs_active = null;
 	options_skin = null;
 	options_skin_active = null;
+	options_playlists = null;
+	options_playlists_active = null;
 
 	isInitialized = false;
     }

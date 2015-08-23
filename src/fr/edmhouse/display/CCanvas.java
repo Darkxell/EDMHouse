@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import fr.edmhouse.audio.playlists.PlaylistHolder;
 import fr.edmhouse.main.EDMHouse;
 import fr.edmhouse.main.SkinsHolder;
 import fr.edmhouse.res.Layout_common;
@@ -24,8 +25,7 @@ public class CCanvas extends Canvas {
     /**
      * The content of the frame. <br/>
      * <strong>0 :</strong> the default play/pause overlay<br/>
-     * <strong>1 : </strong> the list of songs <strong>2 : </strong> the options
-     * menu <br/>
+     * <strong>1 : </strong> the list of songs <br/>
      * <strong>2 :</strong> the options menu<br/>
      * <strong>3 :</strong> the playlist/folder chooser screen<br/>
      * <strong>4 :</strong> the skin list where you can select the skin you want<br/>
@@ -53,6 +53,16 @@ public class CCanvas extends Canvas {
      * hovered or if you are not in the skin list.
      */
     public int hoveredSwapButtonID;
+    /**
+     * The hovered select button id in the playlist list. Is -1 if no select
+     * button is hovered or if you are not in the playlist list.
+     */
+    public int hoveredSelectButtonID;
+    /**
+     * The hovered edit button id in the playlist list. Is -1 if no edit button
+     * is hovered or if you are not in the playlist list.
+     */
+    public int hoveredEditButtonID;
 
     /**
      * Override paint method. Reinitializes the canvas to loading screen if
@@ -351,6 +361,14 @@ public class CCanvas extends Canvas {
 	else
 	    g.drawImage(Res.options_songs, Layout_options.pos_option_songs_x,
 		    Layout_options.pos_option_songs_y, null);
+	if (this.isonoption_playlists())
+	    g.drawImage(Res.options_playlists_active,
+		    Layout_options.pos_option_playlists_x,
+		    Layout_options.pos_option_playlists_y, null);
+	else
+	    g.drawImage(Res.options_playlists,
+		    Layout_options.pos_option_playlists_x,
+		    Layout_options.pos_option_playlists_y, null);
 	// Draws the HUD
 	if (this.isonclose())
 	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
@@ -424,7 +442,165 @@ public class CCanvas extends Canvas {
     }
 
     private void updatePlaylists() {
-	// TODO : yolo
+	BufferStrategy bs = this.getBufferStrategy();
+	Graphics g = bs.getDrawGraphics();
+	g.clearRect(0, 0, this.getWidth(), this.getWidth());
+	// Draws the background
+	g.drawImage(Res.list_background, 0, 0, null);
+	// Draws the list of playlists
+	g.setColor(Layout_list.color_text);
+	g.setFont(Res.font);
+	this.listoffset += EDMHouse.frame.wheelvelocity;
+	int maximumoffset = Layout_list.pos_componnent_y
+		+ ((PlaylistHolder.playlists.length + 2) * Res.list_componnent
+			.getHeight()) - Res.background.getHeight();
+	if (this.listoffset > maximumoffset)
+	    this.listoffset = maximumoffset;
+	if (this.listoffset < 0)
+	    this.listoffset = 0;
+	int temphover = -1;
+	int temphoveredit = -1;
+	int height1 = (int) (Layout_list.pos_componnent_y - this.listoffset);
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height1, null);
+	    char[] optiontitle = "New playlist from folder".toCharArray();
+	    g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
+		    height1 + Layout_list.pos_text_y);
+	    if (isMouseOnEditInComponent(0)) {
+		g.drawImage(
+			Res.list_edit_active,
+			Layout_list.pos_componnent_x + Layout_list.pos_edit_x,
+			height1 + Layout_list.pos_edit_y, null);
+		temphover = 0;
+	    } else
+		g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
+			+ Layout_list.pos_edit_x, height1
+			+ Layout_list.pos_edit_y, null);
+	    height1 = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		    .getHeight()));
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height1, null);
+	    optiontitle = "draft new Playlist".toCharArray();
+	    g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
+		    height1 + Layout_list.pos_text_y);
+	    if (isMouseOnEditInComponent(1)) {
+		g.drawImage(
+			Res.list_edit_active,
+			Layout_list.pos_componnent_x + Layout_list.pos_edit_x,
+			height1 + Layout_list.pos_edit_y, null);
+		temphover = 1;
+	    } else
+		g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
+			+ Layout_list.pos_edit_x, height1
+			+ Layout_list.pos_edit_y, null);
+	for (int i = 2; i < PlaylistHolder.playlists.length + 2; i++) {
+	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		    .getHeight() * i));
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height, null);
+	    char[] listtitle = PlaylistHolder.playlists[i].getname()
+		    .toCharArray();
+	    g.drawChars(listtitle, 0, listtitle.length, Layout_list.pos_text_x,
+		    height + Layout_list.pos_text_y);
+	    if (isMouseOnSelectInComponent(i)) {
+		g.drawImage(
+			Res.list_select_active,
+			Layout_list.pos_componnent_x + Layout_list.pos_select_x,
+			height + Layout_list.pos_select_y, null);
+		temphover = i;
+	    } else
+		g.drawImage(Res.list_select, Layout_list.pos_componnent_x
+			+ Layout_list.pos_select_x, height
+			+ Layout_list.pos_select_y, null);
+	    if (isMouseOnEditInComponent(i)) {
+		g.drawImage(Res.list_edit_active, Layout_list.pos_componnent_x
+			+ Layout_list.pos_edit_x, height
+			+ Layout_list.pos_edit_y, null);
+		temphoveredit = i;
+	    } else
+		g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
+			+ Layout_list.pos_edit_x, height
+			+ Layout_list.pos_edit_y, null);
+	}
+	this.hoveredSelectButtonID = temphover;
+	this.hoveredEditButtonID = temphoveredit;
+	// Draws the scroll bar
+	int scroll_padding = Layout_list.size_slider_height / 10;
+	int scrollVerticalOffest = (int) (this.listoffset
+		* (Layout_list.size_slider_height - (scroll_padding) * 2) / maximumoffset);
+	g.setColor(Layout_list.color_scroll);
+	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
+		+ scrollVerticalOffest, 10, scroll_padding * 2);
+	// Draws the HUD
+	if (this.isonclose())
+	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	else
+	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	if (this.isonrandom())
+	    if (this.random_on)
+		g.drawImage(Res.hud_random_on_active,
+			Layout_common.pos_random_x, Layout_common.pos_random_y,
+			null);
+	    else
+		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
+			Layout_common.pos_random_y, null);
+	else if (this.random_on)
+	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	else
+	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	if (this.isonmini())
+	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	else
+	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	if (this.isonlist())
+	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	else
+	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	if (this.isonskip())
+	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	else
+	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar if needed
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
+		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	}
+	// prints the buffer to the canvas
+	bs.show();
+	g.dispose();
     }
 
     private void updateSkins() {
@@ -605,6 +781,46 @@ public class CCanvas extends Canvas {
     }
 
     /**
+     * Predicates that returns true if the mouse is hovering the edit button in
+     * the container n°<code>containerNumber</code> in the playlist list.
+     * <code>containerNumber</code> must start at 0.
+     */
+    public boolean isMouseOnEditInComponent(int containerNumber) {
+	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
+		|| this.isonmini() || this.isonrandom() || this.isonskip())
+	    return false;
+	int buttonheight = Layout_list.pos_componnent_y
+		+ Layout_list.pos_edit_y
+		+ (containerNumber * Res.list_componnent.getHeight())
+		- (int) this.listoffset;
+	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
+		+ Layout_list.pos_edit_x, buttonheight,
+		Layout_list.pos_componnent_x + Layout_list.pos_edit_x
+			+ Res.list_edit.getWidth(), buttonheight
+			+ Res.list_edit.getHeight()));
+    }
+
+    /**
+     * Predicates that returns true if the mouse is hovering the select button
+     * in the container n°<code>containerNumber</code> in the playlist list.
+     * <code>containerNumber</code> must start at 0.
+     */
+    public boolean isMouseOnSelectInComponent(int containerNumber) {
+	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
+		|| this.isonmini() || this.isonrandom() || this.isonskip())
+	    return false;
+	int buttonheight = Layout_list.pos_componnent_y
+		+ Layout_list.pos_select_y
+		+ (containerNumber * Res.list_componnent.getHeight())
+		- (int) this.listoffset;
+	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
+		+ Layout_list.pos_select_x, buttonheight,
+		Layout_list.pos_componnent_x + Layout_list.pos_select_x
+			+ Res.list_select.getWidth(), buttonheight
+			+ Res.list_select.getHeight()));
+    }
+
+    /**
      * Predicate that returns true if the mouse is hovering the scrollbar
      * componnent and if the frame is in a list state.
      */
@@ -677,7 +893,6 @@ public class CCanvas extends Canvas {
      * content is the default state.
      */
     public boolean isonback() {
-
 	if (this.content == STATE_LIST || this.content == STATE_SKINS
 		|| this.content == STATE_PLAYLISTS)
 	    return EDMHouse.frame.isOnPos(Layout_list.pos_back_x,
@@ -777,5 +992,21 @@ public class CCanvas extends Canvas {
 				+ Res.options_skin.getWidth(),
 			Layout_options.pos_option_skin_y
 				+ Res.options_skin.getHeight());
+    }
+
+    /**
+     * predicate that returns true if the mouse is over the option_playlists
+     * button, in the options state only.
+     */
+    public boolean isonoption_playlists() {
+	if (this.content != STATE_OPTIONS)
+	    return false;
+	return EDMHouse.frame.isOnPos(
+		Layout_options.pos_option_playlists_x,
+		Layout_options.pos_option_playlists_y,
+		Layout_options.pos_option_playlists_x
+			+ Res.options_playlists.getWidth(),
+		Layout_options.pos_option_playlists_y
+			+ Res.options_playlists.getHeight());
     }
 }

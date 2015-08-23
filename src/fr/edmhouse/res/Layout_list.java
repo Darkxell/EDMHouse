@@ -14,6 +14,10 @@ public class Layout_list implements ResLayout {
     public static int pos_componnent_y = 0;
     public static int pos_play_x = 0;
     public static int pos_play_y = 0;
+    public static int pos_select_x = 0;
+    public static int pos_select_y = 0;
+    public static int pos_edit_x = 0;
+    public static int pos_edit_y = 0;
     public static int pos_swap_x = 0;
     public static int pos_swap_y = 0;
     public static int pos_text_x = 0;
@@ -71,6 +75,14 @@ public class Layout_list implements ResLayout {
 		pos_play_x = value;
 	    } else if (array[i].startsWith("pos_play_y(")) {
 		pos_play_y = value;
+	    } else if (array[i].startsWith("pos_select_x(")) {
+		pos_select_x = value;
+	    } else if (array[i].startsWith("pos_select_y(")) {
+		pos_select_y = value;
+	    } else if (array[i].startsWith("pos_edit_x(")) {
+		pos_edit_x = value;
+	    } else if (array[i].startsWith("pos_edit_y(")) {
+		pos_edit_y = value;
 	    } else if (array[i].startsWith("pos_swap_x(")) {
 		pos_swap_x = value;
 	    } else if (array[i].startsWith("pos_swap_y(")) {
