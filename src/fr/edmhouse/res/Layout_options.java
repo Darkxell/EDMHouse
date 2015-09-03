@@ -3,14 +3,11 @@ package fr.edmhouse.res;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import fr.edmhouse.main.Crashframe;
 import fr.edmhouse.main.StringMatcher;
 
 public class Layout_options implements ResLayout {
 
     /* Options buttons positions */
-    public static int pos_option_songs_x = 0;
-    public static int pos_option_songs_y = 0;
     public static int pos_option_skin_x = 0;
     public static int pos_option_skin_y = 0;
     public static int pos_option_playlists_x = 0;
@@ -31,10 +28,7 @@ public class Layout_options implements ResLayout {
 		builder.append(line + "\n");
 	    br.close();
 	} catch (Exception e) {
-	    Crashframe cf = new Crashframe("Ressource error.",
-		    "Sorry, we couldn't find the layout.edm file in the ressources\\list folder."
-			    + "Make sure that the file is present.");
-	    cf.launch();
+	    e.printStackTrace();
 	}
 	filestring = builder.toString();
 	filestring = filestring.toLowerCase();
@@ -49,11 +43,7 @@ public class Layout_options implements ResLayout {
 	    } catch (Exception e) {
 		value = 0;
 	    }
-	    if (array[i].startsWith("pos_option_songs_x(")) {
-		pos_option_songs_x = value;
-	    } else if (array[i].startsWith("pos_option_songs_y(")) {
-		pos_option_songs_y = value;
-	    } else if (array[i].startsWith("pos_option_skin_x(")) {
+	    if (array[i].startsWith("pos_option_skin_x(")) {
 		pos_option_skin_x = value;
 	    } else if (array[i].startsWith("pos_option_skin_y(")) {
 		pos_option_skin_y = value;

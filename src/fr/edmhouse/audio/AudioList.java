@@ -2,6 +2,8 @@ package fr.edmhouse.audio;
 
 import java.io.File;
 
+import fr.edmhouse.audio.playlists.Playlist;
+
 /** An object that holds file objects */
 public class AudioList {
 
@@ -26,6 +28,12 @@ public class AudioList {
 	    s[i] = new Song(content[i].getAbsolutePath());
 	}
 	this.songs = s;
+    }
+
+    /** Constructs an <code>Audiolist</code> object using a playlist. */
+    public AudioList(Playlist playlist) {
+	this.lastindex = -1;
+	this.songs = playlist.getSongs();
     }
 
     /**

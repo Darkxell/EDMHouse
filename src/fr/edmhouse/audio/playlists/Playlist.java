@@ -1,8 +1,12 @@
 package fr.edmhouse.audio.playlists;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 import fr.edmhouse.audio.Song;
+import fr.edmhouse.main.StringMatcher;
+import fr.edmhouse.res.Res;
 
 /**
  * A playlist object is a list of songs objects. You can add some and delete
@@ -26,7 +30,27 @@ public class Playlist {
 
     /** Creates a playlist from saved data of the playlist file. */
     public Playlist(File playlist) {
-	// TODO
+	String filestring = "";
+	StringBuilder builder = new StringBuilder();
+	try {
+	    BufferedReader br = new BufferedReader(new FileReader(playlist));
+	    String line;
+	    while ((line = br.readLine()) != null)
+		builder.append(line + "\n");
+	    br.close();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	filestring = builder.toString();
+	filestring = filestring.toLowerCase();
+	String[] array = filestring.split("\n");
+	Song[] tempsongs = new Song[array.length];
+	for (int i = 0; i < tempsongs.length; i++) {
+	    tempsongs[i] = new Song(array[i]);
+	}
+	this.songs = tempsongs;
+	this.name = StringMatcher.getRawFilename(playlist.getName());
+	this.needSave = false;
     }
 
     /**
@@ -58,9 +82,19 @@ public class Playlist {
 	return this.needSave;
     }
 
-    /** Creates/overrides a playlist file using this playlist object */
+    /**
+     * Creates/overrides a playlist file in the default playlist folder using
+     * this playlist object.
+     */
     public void save() {
-	// TODO
+	String filestring = "";
+	for (int i = 0; i < songs.length; i++) {
+	    if (i != 0)
+		filestring += "/n";
+	    filestring += songs[i].getfilepath();
+	}
+	PlaylistHolder.writeFile(Res.FOLDER_PATH + "playlists//" + this.name
+		+ ".edm", filestring);
 	this.needSave = false;
     }
 

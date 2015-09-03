@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import fr.edmhouse.main.Crashframe;
 import fr.edmhouse.main.StringMatcher;
 
 public class Layout_list implements ResLayout {
@@ -45,10 +44,7 @@ public class Layout_list implements ResLayout {
 		builder.append(line + "\n");
 	    br.close();
 	} catch (Exception e) {
-	    Crashframe cf = new Crashframe("Ressource error.",
-		    "Sorry, we couldn't find the layout.edm file in the ressources\\list folder."
-			    + "Make sure that the file is present.");
-	    cf.launch();
+	    e.printStackTrace();
 	}
 	filestring = builder.toString();
 	filestring = filestring.toLowerCase();

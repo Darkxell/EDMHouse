@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 
 import fr.edmhouse.audio.AudioList;
 import fr.edmhouse.audio.SoundMeter;
+import fr.edmhouse.audio.playlists.PlaylistHolder;
 import fr.edmhouse.main.EDMHouse;
 import fr.edmhouse.main.SkinsHolder;
 import fr.edmhouse.res.Layout_common;
@@ -77,6 +78,8 @@ public class CFrame {
 	    public void mouseReleased(MouseEvent e) {
 		int hoveredID = canvas.hoveredSongButtonID;
 		int hoveredID2 = canvas.hoveredSwapButtonID;
+		int hoveredID3 = canvas.hoveredSelectButtonID;
+		int hoveredID4 = canvas.hoveredEditButtonID;
 		if (canvas.isonclose())
 		    System.exit(0);
 		else if (canvas.isonmini()) {
@@ -141,7 +144,7 @@ public class CFrame {
 		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
 			    .getlength());
 		    EDMHouse.BGM.needjump = true;
-		} else if (canvas.isonoption_songs()) {
+		} else if (canvas.hoveredEditButtonID == 0) {
 		    // Pretty simple for what it does right? ^^
 		    JFileChooser fileChooser = new JFileChooser() {
 			private static final long serialVersionUID = 1L;
@@ -160,6 +163,8 @@ public class CFrame {
 			File folder = fileChooser.getSelectedFile();
 			EDMHouse.songs = new AudioList(folder.getAbsolutePath());
 		    }
+		} else if (hoveredID3 >= 2) {
+		    EDMHouse.songs = new AudioList(PlaylistHolder.playlists[hoveredID3-2]);
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
 		} else if (canvas.isonoption_playlists()) {

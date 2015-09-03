@@ -73,7 +73,11 @@ public class CCanvas extends Canvas {
 	g.drawImage(Res.loading, 0, 0, null);
     }
 
-    /** Additional, not required constructor part. */
+    /**
+     * Additional, not required constructor part. I don't even know why it's
+     * here anymore, it's probably totaly useless, exept the line that sets the
+     * volume.
+     */
     public void initialize() {
 	this.content = STATE_DEFAULT;
 	this.random_on = true;
@@ -81,7 +85,6 @@ public class CCanvas extends Canvas {
 	this.progression = 0;
 	this.textoffset = 0;
 	this.listoffset = 0;
-	this.hoveredSongButtonID = -1;
 	this.volume = Layout_common.value_volumestart;
     }
 
@@ -93,6 +96,11 @@ public class CCanvas extends Canvas {
 	    this.hoveredSongButtonID = -1;
 	if (this.content != STATE_SKINS)
 	    this.hoveredSwapButtonID = -1;
+	if (this.content != STATE_PLAYLISTS){
+	    this.hoveredSelectButtonID = -1;
+	    this.hoveredEditButtonID = -1;
+	}
+	    
 	switch (this.content) {
 	case STATE_DEFAULT:
 	    this.updateCommon();
@@ -354,13 +362,6 @@ public class CCanvas extends Canvas {
 	else
 	    g.drawImage(Res.options_skin, Layout_options.pos_option_skin_x,
 		    Layout_options.pos_option_skin_y, null);
-	if (this.isonoption_songs())
-	    g.drawImage(Res.options_songs_active,
-		    Layout_options.pos_option_songs_x,
-		    Layout_options.pos_option_songs_y, null);
-	else
-	    g.drawImage(Res.options_songs, Layout_options.pos_option_songs_x,
-		    Layout_options.pos_option_songs_y, null);
 	if (this.isonoption_playlists())
 	    g.drawImage(Res.options_playlists_active,
 		    Layout_options.pos_option_playlists_x,
@@ -461,44 +462,42 @@ public class CCanvas extends Canvas {
 	int temphover = -1;
 	int temphoveredit = -1;
 	int height1 = (int) (Layout_list.pos_componnent_y - this.listoffset);
-	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
-		    height1, null);
-	    char[] optiontitle = "New playlist from folder".toCharArray();
-	    g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
-		    height1 + Layout_list.pos_text_y);
-	    if (isMouseOnEditInComponent(0)) {
-		g.drawImage(
-			Res.list_edit_active,
-			Layout_list.pos_componnent_x + Layout_list.pos_edit_x,
-			height1 + Layout_list.pos_edit_y, null);
-		temphover = 0;
-	    } else
-		g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
-			+ Layout_list.pos_edit_x, height1
-			+ Layout_list.pos_edit_y, null);
-	    height1 = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
-		    .getHeight()));
-	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
-		    height1, null);
-	    optiontitle = "draft new Playlist".toCharArray();
-	    g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
-		    height1 + Layout_list.pos_text_y);
-	    if (isMouseOnEditInComponent(1)) {
-		g.drawImage(
-			Res.list_edit_active,
-			Layout_list.pos_componnent_x + Layout_list.pos_edit_x,
-			height1 + Layout_list.pos_edit_y, null);
-		temphover = 1;
-	    } else
-		g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
-			+ Layout_list.pos_edit_x, height1
-			+ Layout_list.pos_edit_y, null);
+	g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x, height1,
+		null);
+	char[] optiontitle = "Open a songs folder".toCharArray();
+	g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
+		height1 + Layout_list.pos_text_y);
+	if (isMouseOnEditInComponent(0)) {
+	    g.drawImage(Res.list_edit_active, Layout_list.pos_componnent_x
+		    + Layout_list.pos_edit_x, height1 + Layout_list.pos_edit_y,
+		    null);
+	    temphoveredit = 0;
+	} else
+	    g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
+		    + Layout_list.pos_edit_x, height1 + Layout_list.pos_edit_y,
+		    null);
+	height1 = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		.getHeight()));
+	g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x, height1,
+		null);
+	optiontitle = "Draft a new playlist".toCharArray();
+	g.drawChars(optiontitle, 0, optiontitle.length, Layout_list.pos_text_x,
+		height1 + Layout_list.pos_text_y);
+	if (isMouseOnEditInComponent(1)) {
+	    g.drawImage(Res.list_edit_active, Layout_list.pos_componnent_x
+		    + Layout_list.pos_edit_x, height1 + Layout_list.pos_edit_y,
+		    null);
+	    temphoveredit = 1;
+	} else
+	    g.drawImage(Res.list_edit, Layout_list.pos_componnent_x
+		    + Layout_list.pos_edit_x, height1 + Layout_list.pos_edit_y,
+		    null);
 	for (int i = 2; i < PlaylistHolder.playlists.length + 2; i++) {
 	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
 		    .getHeight() * i));
 	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
 		    height, null);
-	    char[] listtitle = PlaylistHolder.playlists[i].getname()
+	    char[] listtitle = PlaylistHolder.playlists[i - 2].getname()
 		    .toCharArray();
 	    g.drawChars(listtitle, 0, listtitle.length, Layout_list.pos_text_x,
 		    height + Layout_list.pos_text_y);
@@ -825,7 +824,8 @@ public class CCanvas extends Canvas {
      * componnent and if the frame is in a list state.
      */
     public boolean isMouseOnScrollbar() {
-	if (this.content != STATE_LIST && this.content != STATE_SKINS)
+	if (this.content != STATE_LIST && this.content != STATE_SKINS
+		&& this.content != STATE_PLAYLISTS)
 	    return false;
 	return (EDMHouse.frame.isOnPos(Layout_list.pos_slider_x,
 		Layout_list.pos_slider_y, Layout_list.pos_slider_x + 10,
@@ -959,22 +959,6 @@ public class CCanvas extends Canvas {
 		Layout_common.pos_options_y, Layout_common.pos_options_x
 			+ Res.hud_options.getWidth(),
 		Layout_common.pos_options_y + Res.hud_options.getHeight());
-    }
-
-    /**
-     * predicate that returns true if the mouse is over the option_songs button,
-     * in the options state only.
-     */
-    public boolean isonoption_songs() {
-	if (this.content != STATE_OPTIONS)
-	    return false;
-	return EDMHouse.frame.isOnPos(
-		Layout_options.pos_option_songs_x,
-		Layout_options.pos_option_songs_y,
-		Layout_options.pos_option_songs_x
-			+ Res.options_songs.getWidth(),
-		Layout_options.pos_option_songs_y
-			+ Res.options_songs.getHeight());
     }
 
     /**

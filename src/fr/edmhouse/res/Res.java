@@ -6,8 +6,6 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import fr.edmhouse.main.Crashframe;
-
 /**
  * Static class that holds ressources as Java objects for font and images. Make
  * sure to initialize it before using it. Contained data can be flushed to
@@ -83,8 +81,6 @@ public class Res {
 
     /* The images used in the option menu */
     public static BufferedImage options_background;
-    public static BufferedImage options_songs;
-    public static BufferedImage options_songs_active;
     public static BufferedImage options_skin;
     public static BufferedImage options_skin_active;
     public static BufferedImage options_playlists;
@@ -97,15 +93,7 @@ public class Res {
 	    loading = ImageIO.read(new File(currentSkinPath + "loading.png"));
 	    restore();
 	} catch (Exception e) {
-	    Crashframe cf = new Crashframe(
-		    "Ressource error.",
-		    "Sorry, an error happened while loading ressources."
-			    + " Make sure that all the ressources are in "
-			    + "the \"ressources\" folder next to the .jar file."
-			    + " If you keep seeing this message, you might be "
-			    + "missing some ressources or the skin you are "
-			    + "using don't have them all.");
-	    cf.launch();
+	    e.printStackTrace();
 	}
 
     }
@@ -201,10 +189,6 @@ public class Res {
 
 		options_background = ImageIO.read(new File(currentSkinPath
 			+ "options\\background.png"));
-		options_songs = ImageIO.read(new File(currentSkinPath
-			+ "options\\option_songs.png"));
-		options_songs_active = ImageIO.read(new File(currentSkinPath
-			+ "options\\option_songs_active.png"));
 		options_skin = ImageIO.read(new File(currentSkinPath
 			+ "options\\option_skin.png"));
 		options_skin_active = ImageIO.read(new File(currentSkinPath
@@ -216,15 +200,7 @@ public class Res {
 
 		isInitialized = true;
 	    } catch (Exception e) {
-		Crashframe cf = new Crashframe(
-			"Ressource error.",
-			"Sorry, an error happened while loading ressources."
-				+ " Make sure that all the ressources are in "
-				+ "the \"ressources\" folder next to the .jar file."
-				+ " If you keep seeing this message, you might be "
-				+ "missing some ressources or the skin you are "
-				+ "using don't have them all.");
-		cf.launch();
+		e.printStackTrace();
 	    }
 	}
     }
@@ -272,8 +248,6 @@ public class Res {
 	list_background = null;
 	list_foreground = null;
 	options_background = null;
-	options_songs = null;
-	options_songs_active = null;
 	options_skin = null;
 	options_skin_active = null;
 	options_playlists = null;
