@@ -156,50 +156,8 @@ public class CCanvas extends Canvas {
 	// Draws the background
 	g.drawImage(Res.background, 0, 0, null);
 	// Draws the HUD
-	if (this.isonclose())
-	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	else
-	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	if (this.isonoptions())
-	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	else
-	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	if (this.isonrandom())
-	    if (this.random_on)
-		g.drawImage(Res.hud_random_on_active,
-			Layout_common.pos_random_x, Layout_common.pos_random_y,
-			null);
-	    else
-		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
-			Layout_common.pos_random_y, null);
-	else if (this.random_on)
-	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	else
-	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	if (this.isonmini())
-	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	else
-	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	if (this.isonlist())
-	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	else
-	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	if (this.isonskip())
-	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
-	else
-	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
+	addButtonsToBuffer(g);
+	// Draws the volume bar
 	g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
 		Layout_common.pos_volume_y, null);
 	int volpos = (int) (((float) this.volume)
@@ -301,50 +259,7 @@ public class CCanvas extends Canvas {
 		+ scrollVerticalOffest, 10, scroll_padding * 2);
 
 	// Draws the HUD
-	if (this.isonclose()) {
-	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	} else
-	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	if (this.isonoptions())
-	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	else
-	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	if (this.isonrandom()) {
-	    if (this.random_on)
-		g.drawImage(Res.hud_random_on_active,
-			Layout_common.pos_random_x, Layout_common.pos_random_y,
-			null);
-	    else
-		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
-			Layout_common.pos_random_y, null);
-	} else if (this.random_on)
-	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	else
-	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	if (this.isonmini()) {
-	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	} else
-	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	if (this.isonlist()) {
-	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	} else
-	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	if (this.isonskip()) {
-	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
-	} else
-	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
+	addButtonsToBuffer(g);
 
 	if (Layout_list.value_showvolume == ResLayout.TRUE) {
 	    // Draws the volumebar.
@@ -398,50 +313,7 @@ public class CCanvas extends Canvas {
 		    Layout_options.pos_option_playlists_x,
 		    Layout_options.pos_option_playlists_y, null);
 	// Draws the HUD
-	if (this.isonclose())
-	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	else
-	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	if (this.isonoptions())
-	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	else
-	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	if (this.isonrandom())
-	    if (this.random_on)
-		g.drawImage(Res.hud_random_on_active,
-			Layout_common.pos_random_x, Layout_common.pos_random_y,
-			null);
-	    else
-		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
-			Layout_common.pos_random_y, null);
-	else if (this.random_on)
-	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	else
-	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	if (this.isonmini())
-	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	else
-	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	if (this.isonlist())
-	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	else
-	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	if (this.isonskip())
-	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
-	else
-	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
+	addButtonsToBuffer(g);
 	if (Layout_options.value_showvolume == ResLayout.TRUE) {
 	    // Draws the volumebar if needed
 	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
@@ -558,50 +430,7 @@ public class CCanvas extends Canvas {
 	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
 		+ scrollVerticalOffest, 10, scroll_padding * 2);
 	// Draws the HUD
-	if (this.isonclose())
-	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	else
-	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	if (this.isonoptions())
-	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	else
-	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	if (this.isonrandom())
-	    if (this.random_on)
-		g.drawImage(Res.hud_random_on_active,
-			Layout_common.pos_random_x, Layout_common.pos_random_y,
-			null);
-	    else
-		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
-			Layout_common.pos_random_y, null);
-	else if (this.random_on)
-	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	else
-	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	if (this.isonmini())
-	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	else
-	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	if (this.isonlist())
-	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	else
-	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	if (this.isonskip())
-	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
-	else
-	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
+	addButtonsToBuffer(g);
 	if (Layout_list.value_showvolume == ResLayout.TRUE) {
 	    // Draws the volumebar if needed
 	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
@@ -674,50 +503,7 @@ public class CCanvas extends Canvas {
 	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
 		+ scrollVerticalOffest, 10, scroll_padding * 2);
 	// Draws the HUD
-	if (this.isonclose()) {
-	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	} else
-	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
-		    Layout_common.pos_close_y, null);
-	if (this.isonoptions())
-	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	else
-	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
-		    Layout_common.pos_options_y, null);
-	if (this.isonrandom()) {
-	    if (this.random_on)
-		g.drawImage(Res.hud_random_on_active,
-			Layout_common.pos_random_x, Layout_common.pos_random_y,
-			null);
-	    else
-		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
-			Layout_common.pos_random_y, null);
-	} else if (this.random_on)
-	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	else
-	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
-		    Layout_common.pos_random_y, null);
-	if (this.isonmini()) {
-	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	} else
-	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
-		    Layout_common.pos_mini_y, null);
-	if (this.isonlist()) {
-	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	} else
-	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
-		    Layout_common.pos_list_y, null);
-	if (this.isonskip()) {
-	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
-	} else
-	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
-		    Layout_common.pos_skip_y, null);
+	addButtonsToBuffer(g);
 
 	if (Layout_list.value_showvolume == ResLayout.TRUE) {
 	    // Draws the volumebar if needed.
@@ -795,6 +581,51 @@ public class CCanvas extends Canvas {
 	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
 		+ scrollVerticalOffest, 10, scroll_padding * 2);
 	// Draws the HUD
+	addButtonsToBuffer(g);
+
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar if needed.
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
+		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	}
+	// Draws the list foreground
+	g.drawImage(Res.list_foreground, 0, 0, null);
+	bs.show();
+	g.dispose();
+    }
+
+    private void updateAdder() {
+
+    }
+
+    /**
+     * Takes a pointer to a graphics object and uses it to ptint the main
+     * buttons to the craphic displayable content (most likely a buffer).<br/>
+     * The added buttons are conditionnal of the mouse position registered by
+     * the canvas and the layouts button positions. THe buttons are : close,
+     * options, random, skip, list and minimize.
+     * 
+     * @param g
+     *            the graphics object that will be used to print the buttons.
+     */
+    private void addButtonsToBuffer(Graphics g) {
 	if (this.isonclose()) {
 	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
 		    Layout_common.pos_close_y, null);
@@ -839,37 +670,6 @@ public class CCanvas extends Canvas {
 	} else
 	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
 		    Layout_common.pos_skip_y, null);
-
-	if (Layout_list.value_showvolume == ResLayout.TRUE) {
-	    // Draws the volumebar if needed.
-	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
-		    Layout_common.pos_volume_y, null);
-	    int volpos = (int) (((float) this.volume)
-		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
-	    if (this.isonvolume()) {
-		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
-			+ volpos, Layout_common.pos_volume_y, null);
-	    } else {
-		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
-			Layout_common.pos_volume_y, null);
-	    }
-	}
-	// Draws the back button
-	if (this.isonback()) {
-	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
-		    Layout_list.pos_back_y, null);
-	} else {
-	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
-		    Layout_list.pos_back_y, null);
-	}
-	// Draws the list foreground
-	g.drawImage(Res.list_foreground, 0, 0, null);
-	bs.show();
-	g.dispose();
-    }
-
-    private void updateAdder() {
-
     }
 
     /** Resets the progress bar to the begining. */

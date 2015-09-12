@@ -80,6 +80,8 @@ public class CFrame {
 		int hoveredID2 = canvas.hoveredSwapButtonID;
 		int hoveredID3 = canvas.hoveredSelectButtonID;
 		int hoveredID4 = canvas.hoveredEditButtonID;
+		int hoveredID5 = canvas.hoveredPlaylistRemoveButtonID;
+		int hoveredID6 = canvas.hoveredPlaylistAddButtonID;
 		if (canvas.isonclose())
 		    System.exit(0);
 		else if (canvas.isonmini()) {
@@ -213,9 +215,37 @@ public class CFrame {
 		if (canvas.isMouseOnScrollbar()) {
 		    double mouseYOnBar = e.getY()
 			    - (Layout_list.pos_slider_y + (Layout_list.size_slider_height / 10));
-		    double maximumListOffset = Layout_list.pos_componnent_y
-			    + (EDMHouse.songs.getSongAmmount() * Res.list_componnent
-				    .getHeight()) - Res.background.getHeight();
+		    double maximumListOffset = 0;
+		    switch (canvas.content) {
+		    case CCanvas.STATE_LIST:
+			maximumListOffset = Layout_list.pos_componnent_y
+				+ (EDMHouse.songs.getSongAmmount() * Res.list_componnent
+					.getHeight())
+				- Res.background.getHeight();
+			break;
+		    case CCanvas.STATE_PLAYLISTS:
+			maximumListOffset = Layout_list.pos_componnent_y
+				+ ((PlaylistHolder.playlists.length + 2) * Res.list_componnent
+					.getHeight())
+				- Res.background.getHeight();
+			break;
+		    case CCanvas.STATE_PLAYLISTEDITOR:
+			maximumListOffset = Layout_list.pos_componnent_y
+				+ ((PlaylistHolder.playlists[canvas.editingList]
+					.getSongs().length + 1) * Res.list_componnent
+					.getHeight())
+				- Res.background.getHeight();
+			break;
+		    case CCanvas.STATE_PLAYLISTSONGADDER:
+			maximumListOffset = Layout_list.pos_componnent_y
+				+ ((EDMHouse.songs.getSongAmmount() + 1) * Res.list_componnent
+					.getHeight())
+				- Res.background.getHeight();
+			break;
+		    default:
+			break;
+		    }
+
 		    canvas.listoffset = (int) ((mouseYOnBar / (Layout_list.size_slider_height * 0.8)) * maximumListOffset);
 		} else if (canvas.isonvolume()) {
 		    double mouseXOnBar = e.getX() - Layout_common.pos_volume_x
@@ -299,7 +329,8 @@ public class CFrame {
     /**
      * Changes the size of the frame the the desired value. Be aware that using
      * this method to change the frame size to a bigger value than the
-     * background will result in grey borders.
+     * background will result in grey borders. Also this changes the size of the
+     * shadows behind the frame.
      */
     public void changeSize(int width, int height) {
 	this.frame.setSize(width, height);
