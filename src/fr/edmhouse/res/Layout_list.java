@@ -19,6 +19,8 @@ public class Layout_list implements ResLayout {
     public static int pos_edit_y = 0;
     public static int pos_swap_x = 0;
     public static int pos_swap_y = 0;
+    public static int pos_remove_x = 0;
+    public static int pos_remove_y = 0;
     public static int pos_text_x = 0;
     public static int pos_text_y = 0;
     public static int pos_slider_x = 0;
@@ -83,6 +85,10 @@ public class Layout_list implements ResLayout {
 		pos_swap_x = value;
 	    } else if (array[i].startsWith("pos_swap_y(")) {
 		pos_swap_y = value;
+	    }  else if (array[i].startsWith("pos_remove_x(")) {
+		pos_remove_x = value;
+	    } else if (array[i].startsWith("pos_remove_y(")) {
+		pos_remove_y = value;
 	    } else if (array[i].startsWith("pos_text_x(")) {
 		pos_text_x = value;
 	    } else if (array[i].startsWith("pos_text_y(")) {

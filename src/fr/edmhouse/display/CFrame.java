@@ -103,7 +103,12 @@ public class CFrame {
 		} else if (canvas.isonrandom())
 		    canvas.random_on = !canvas.random_on;
 		else if (canvas.isonback()) {
-		    canvas.content = CCanvas.STATE_DEFAULT;
+		    if (canvas.content == CCanvas.STATE_PLAYLISTEDITOR)
+			canvas.content = CCanvas.STATE_PLAYLISTS;
+		    else if (canvas.content == CCanvas.STATE_PLAYLISTSONGADDER)
+			canvas.content = CCanvas.STATE_PLAYLISTEDITOR;
+		    else
+			canvas.content = CCanvas.STATE_DEFAULT;
 		} else if (canvas.isonlist())
 		    if (canvas.content != CCanvas.STATE_LIST)
 			canvas.content = CCanvas.STATE_LIST;
@@ -164,7 +169,11 @@ public class CFrame {
 			EDMHouse.songs = new AudioList(folder.getAbsolutePath());
 		    }
 		} else if (hoveredID3 >= 2) {
-		    EDMHouse.songs = new AudioList(PlaylistHolder.playlists[hoveredID3-2]);
+		    EDMHouse.songs = new AudioList(
+			    PlaylistHolder.playlists[hoveredID3 - 2]);
+		} else if (hoveredID4 >= 2) {
+		    canvas.editingList = hoveredID4 - 2;
+		    canvas.content = CCanvas.STATE_PLAYLISTEDITOR;
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
 		} else if (canvas.isonoption_playlists()) {

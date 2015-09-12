@@ -75,6 +75,8 @@ public class Res {
     public static BufferedImage list_edit_active;
     public static BufferedImage list_swap;
     public static BufferedImage list_swap_active;
+    public static BufferedImage list_remove;
+    public static BufferedImage list_remove_active;
     public static BufferedImage list_componnent;
     public static BufferedImage list_background;
     public static BufferedImage list_foreground;
@@ -178,6 +180,10 @@ public class Res {
 			+ "list\\swap.png"));
 		list_swap_active = ImageIO.read(new File(currentSkinPath
 			+ "list\\swap_active.png"));
+		list_remove = ImageIO.read(new File(currentSkinPath
+			+ "list\\remove.png"));
+		list_remove_active = ImageIO.read(new File(currentSkinPath
+			+ "list\\remove_active.png"));
 		list_componnent = ImageIO.read(new File(currentSkinPath
 			+ "list\\container.png"));
 		list_background = ImageIO.read(new File(currentSkinPath
@@ -195,8 +201,9 @@ public class Res {
 			+ "options\\option_skin_active.png"));
 		options_playlists = ImageIO.read(new File(currentSkinPath
 			+ "options\\option_playlists.png"));
-		options_playlists_active = ImageIO.read(new File(currentSkinPath
-			+ "options\\option_playlists_active.png"));
+		options_playlists_active = ImageIO.read(new File(
+			currentSkinPath
+				+ "options\\option_playlists_active.png"));
 
 		isInitialized = true;
 	    } catch (Exception e) {
@@ -244,6 +251,8 @@ public class Res {
 	list_edit_active = null;
 	list_swap = null;
 	list_swap_active = null;
+	list_remove = null;
+	list_remove_active = null;
 	list_componnent = null;
 	list_background = null;
 	list_foreground = null;

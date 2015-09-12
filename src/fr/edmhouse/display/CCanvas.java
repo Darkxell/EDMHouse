@@ -22,13 +22,19 @@ public class CCanvas extends Canvas {
     public static final int STATE_OPTIONS = 2;
     public static final int STATE_PLAYLISTS = 3;
     public static final int STATE_SKINS = 4;
+    public static final int STATE_PLAYLISTEDITOR = 5;
+    public static final int STATE_PLAYLISTSONGADDER = 6;
     /**
      * The content of the frame. <br/>
      * <strong>0 :</strong> the default play/pause overlay<br/>
-     * <strong>1 : </strong> the list of songs <br/>
+     * <strong>1 :</strong> the list of songs <br/>
      * <strong>2 :</strong> the options menu<br/>
      * <strong>3 :</strong> the playlist/folder chooser screen<br/>
      * <strong>4 :</strong> the skin list where you can select the skin you want<br/>
+     * <strong>5 :</strong> the playlist editor. Where you see the playlist
+     * content and can add or remove songs.<br/>
+     * <strong>6 :</strong> the song selector interface. Displays the list of
+     * songs in the default folder to choose from.<br/>
      */
     public int content;
     /** Is true if the random mode for song pickups is on. */
@@ -37,6 +43,8 @@ public class CCanvas extends Canvas {
     public boolean state;
     /** the progression of the music, in miliseconds. */
     public int progression;
+    /** The current editing playlist. Is changed each time you open a playlist. */
+    public int editingList;
     /** the volume (0-100). Marks the progression of the volume ki thingy. */
     public int volume;
     /** the horisontal offset of the text. Might be negative. */
@@ -63,6 +71,16 @@ public class CCanvas extends Canvas {
      * is hovered or if you are not in the playlist list.
      */
     public int hoveredEditButtonID;
+    /**
+     * The hovered remove button id in the playlist editor. Is -1 if no remove
+     * button is hovered or if you are not in a playlist edition mode.
+     */
+    public int hoveredPlaylistRemoveButtonID;
+    /**
+     * The hovered add button id in the playlist song adder. Is -1 if no add
+     * button is hovered or if you are not in a playlist song adder mode.
+     */
+    public int hoveredPlaylistAddButtonID;
 
     /**
      * Override paint method. Reinitializes the canvas to loading screen if
@@ -96,11 +114,14 @@ public class CCanvas extends Canvas {
 	    this.hoveredSongButtonID = -1;
 	if (this.content != STATE_SKINS)
 	    this.hoveredSwapButtonID = -1;
-	if (this.content != STATE_PLAYLISTS){
+	if (this.content != STATE_PLAYLISTS) {
 	    this.hoveredSelectButtonID = -1;
 	    this.hoveredEditButtonID = -1;
 	}
-	    
+	if (this.content != STATE_PLAYLISTEDITOR)
+	    this.hoveredPlaylistRemoveButtonID = -1;
+	if (this.content != STATE_PLAYLISTSONGADDER)
+	    this.hoveredPlaylistAddButtonID = -1;
 	switch (this.content) {
 	case STATE_DEFAULT:
 	    this.updateCommon();
@@ -116,6 +137,12 @@ public class CCanvas extends Canvas {
 	    break;
 	case STATE_SKINS:
 	    this.updateSkins();
+	    break;
+	case STATE_PLAYLISTEDITOR:
+	    this.updateEditor();
+	    break;
+	case STATE_PLAYLISTSONGADDER:
+	    this.updateAdder();
 	    break;
 	default:
 	    break;
@@ -721,6 +748,130 @@ public class CCanvas extends Canvas {
 	g.dispose();
     }
 
+    private void updateEditor() {
+	BufferStrategy bs = this.getBufferStrategy();
+	Graphics g = bs.getDrawGraphics();
+	g.clearRect(0, 0, this.getWidth(), this.getWidth());
+	// Draws the background
+	g.drawImage(Res.list_background, 0, 0, null);
+	// Draws the componnents
+	g.setColor(Layout_list.color_text);
+	g.setFont(Res.font);
+	this.listoffset += EDMHouse.frame.wheelvelocity;
+	int maximumoffset = Layout_list.pos_componnent_y
+		+ (PlaylistHolder.playlists[this.editingList].getSongs().length * Res.list_componnent
+			.getHeight()) - Res.background.getHeight();
+	if (this.listoffset > maximumoffset)
+	    this.listoffset = maximumoffset;
+	if (this.listoffset < 0)
+	    this.listoffset = 0;
+	int temphover = -1;
+	for (int i = 0; i < PlaylistHolder.playlists[this.editingList]
+		.getSongs().length; i++) {
+	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		    .getHeight() * i));
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height, null);
+	    char[] skintitle = PlaylistHolder.playlists[this.editingList]
+		    .getSongs()[i].getdipsplayname().toCharArray();
+	    g.drawChars(skintitle, 0, skintitle.length, Layout_list.pos_text_x,
+		    height + Layout_list.pos_text_y);
+	    if (isMouseOnRemoveInComponent(i)) {
+		g.drawImage(Res.list_remove_active, Layout_list.pos_remove_x
+			+ Layout_list.pos_remove_x, height
+			+ Layout_list.pos_remove_y, null);
+		temphover = i;
+	    } else
+		g.drawImage(Res.list_remove, Layout_list.pos_remove_x
+			+ Layout_list.pos_remove_x, height
+			+ Layout_list.pos_remove_y, null);
+	}
+	this.hoveredPlaylistRemoveButtonID = temphover;
+	// Draws the scroll bar
+	int scroll_padding = Layout_list.size_slider_height / 10;
+	int scrollVerticalOffest = (int) (this.listoffset
+		* (Layout_list.size_slider_height - (scroll_padding) * 2) / maximumoffset);
+	g.setColor(Layout_list.color_scroll);
+	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
+		+ scrollVerticalOffest, 10, scroll_padding * 2);
+	// Draws the HUD
+	if (this.isonclose()) {
+	    g.drawImage(Res.hud_cross_red, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	} else
+	    g.drawImage(Res.hud_cross_white, Layout_common.pos_close_x,
+		    Layout_common.pos_close_y, null);
+	if (this.isonoptions())
+	    g.drawImage(Res.hud_options_active, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	else
+	    g.drawImage(Res.hud_options, Layout_common.pos_options_x,
+		    Layout_common.pos_options_y, null);
+	if (this.isonrandom()) {
+	    if (this.random_on)
+		g.drawImage(Res.hud_random_on_active,
+			Layout_common.pos_random_x, Layout_common.pos_random_y,
+			null);
+	    else
+		g.drawImage(Res.hud_random_active, Layout_common.pos_random_x,
+			Layout_common.pos_random_y, null);
+	} else if (this.random_on)
+	    g.drawImage(Res.hud_random_on, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	else
+	    g.drawImage(Res.hud_random, Layout_common.pos_random_x,
+		    Layout_common.pos_random_y, null);
+	if (this.isonmini()) {
+	    g.drawImage(Res.hud_mini_grey, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	} else
+	    g.drawImage(Res.hud_mini_white, Layout_common.pos_mini_x,
+		    Layout_common.pos_mini_y, null);
+	if (this.isonlist()) {
+	    g.drawImage(Res.hud_list_active, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	} else
+	    g.drawImage(Res.hud_list, Layout_common.pos_list_x,
+		    Layout_common.pos_list_y, null);
+	if (this.isonskip()) {
+	    g.drawImage(Res.hud_skip_active, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+	} else
+	    g.drawImage(Res.hud_skip, Layout_common.pos_skip_x,
+		    Layout_common.pos_skip_y, null);
+
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar if needed.
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
+		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	}
+	// Draws the list foreground
+	g.drawImage(Res.list_foreground, 0, 0, null);
+	bs.show();
+	g.dispose();
+    }
+
+    private void updateAdder() {
+
+    }
+
     /** Resets the progress bar to the begining. */
     public void resetprogress() {
 	this.progression = 0;
@@ -820,12 +971,34 @@ public class CCanvas extends Canvas {
     }
 
     /**
+     * Predicates that returns true if the mouse is hovering the remove button
+     * in the container n°<code>containerNumber</code> in the edit playlist
+     * list. <code>containerNumber</code> must start at 0.
+     */
+    public boolean isMouseOnRemoveInComponent(int containerNumber) {
+	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
+		|| this.isonmini() || this.isonrandom() || this.isonskip())
+	    return false;
+	int buttonheight = Layout_list.pos_componnent_y
+		+ Layout_list.pos_remove_y
+		+ (containerNumber * Res.list_componnent.getHeight())
+		- (int) this.listoffset;
+	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
+		+ Layout_list.pos_remove_x, buttonheight,
+		Layout_list.pos_componnent_x + Layout_list.pos_remove_x
+			+ Res.list_remove.getWidth(), buttonheight
+			+ Res.list_remove.getHeight()));
+    }
+
+    /**
      * Predicate that returns true if the mouse is hovering the scrollbar
      * componnent and if the frame is in a list state.
      */
     public boolean isMouseOnScrollbar() {
 	if (this.content != STATE_LIST && this.content != STATE_SKINS
-		&& this.content != STATE_PLAYLISTS)
+		&& this.content != STATE_PLAYLISTS
+		&& this.content != STATE_PLAYLISTEDITOR
+		&& this.content != STATE_PLAYLISTSONGADDER)
 	    return false;
 	return (EDMHouse.frame.isOnPos(Layout_list.pos_slider_x,
 		Layout_list.pos_slider_y, Layout_list.pos_slider_x + 10,
@@ -894,7 +1067,9 @@ public class CCanvas extends Canvas {
      */
     public boolean isonback() {
 	if (this.content == STATE_LIST || this.content == STATE_SKINS
-		|| this.content == STATE_PLAYLISTS)
+		|| this.content == STATE_PLAYLISTS
+		|| this.content == STATE_PLAYLISTEDITOR
+		|| this.content == STATE_PLAYLISTSONGADDER)
 	    return EDMHouse.frame.isOnPos(Layout_list.pos_back_x,
 		    Layout_list.pos_back_y, Layout_list.pos_back_x
 			    + Res.hud_back.getWidth(), Layout_list.pos_back_y
