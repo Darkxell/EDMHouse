@@ -40,18 +40,17 @@ public class Playlist {
 	    BufferedReader br = new BufferedReader(new FileReader(playlist));
 	    String line;
 	    while ((line = br.readLine()) != null)
-		builder.append(line + "\n");
+		builder.append(line);
 	    br.close();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	filestring = builder.toString();
 	filestring = filestring.toLowerCase();
-	String[] array = filestring.split("\n");
+	String[] array = filestring.split("\"");
 	Song[] tempsongs = new Song[array.length];
-	for (int i = 0; i < tempsongs.length; i++) {
+	for (int i = 0; i < tempsongs.length; i++)
 	    tempsongs[i] = new Song(array[i]);
-	}
 	this.songs = tempsongs;
 	this.name = StringMatcher.getRawFilename(playlist.getName());
 	this.needSave = false;
@@ -82,6 +81,7 @@ public class Playlist {
 	for (int i = 0; i < temparray.length; i++)
 	    temparray[i] = this.songs[(i < songID) ? i : i + 1];
 	this.songs = temparray;
+	this.needSave = true;
     }
 
     /** Gets the songs of the playlist object. */
@@ -107,7 +107,7 @@ public class Playlist {
 	String filestring = "";
 	for (int i = 0; i < songs.length; i++) {
 	    if (i != 0)
-		filestring += "/n";
+		filestring += "\"";
 	    filestring += songs[i].getfilepath();
 	}
 	PlaylistHolder.writeFile(Res.FOLDER_PATH + "playlists//" + this.name

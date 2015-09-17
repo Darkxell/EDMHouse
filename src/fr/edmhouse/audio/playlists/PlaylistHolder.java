@@ -18,9 +18,8 @@ public class PlaylistHolder {
 	File folder = new File(Res.FOLDER_PATH + "playlists");
 	File[] content = folder.listFiles();
 	Playlist[] tempPlaylists = new Playlist[content.length];
-	for (int i = 0; i < tempPlaylists.length; i++) {
+	for (int i = 0; i < tempPlaylists.length; i++)
 	    tempPlaylists[i] = readFile(content[i]);
-	}
 	playlists = tempPlaylists;
     }
 
@@ -30,12 +29,26 @@ public class PlaylistHolder {
     }
 
     /**
+     * Adds a new playlist to the array of playlists, just using a playlist
+     * name. The created playlist is set to need save so it's file is
+     * automaticly created by the running update thread. The new playlist is the
+     * first of the new array.
+     */
+    public static void addNewPlaylist(String name) {
+	Playlist[] temparray = new Playlist[playlists.length + 1];
+	for (int i = 1; i < temparray.length; i++)
+	    temparray[i] = playlists[i - 1];
+	temparray[0] = new Playlist(name);
+	playlists = temparray;
+    }
+
+    /**
      * Tests the current playlists to test if one needs to be saved.
      * 
      * @return True if one or more of the playlists needs saving, false
      *         otherwise.
      * */
-    public boolean doOneNeedSave() {
+    public static boolean doOneNeedSave() {
 	for (int i = 0; i < playlists.length; i++)
 	    if (playlists[i].needSave())
 		return true;
@@ -43,7 +56,7 @@ public class PlaylistHolder {
     }
 
     /** Saves the playlists that needs saving. */
-    public void saveAll() {
+    public static void saveAll() {
 	for (int i = 0; i < playlists.length; i++)
 	    if (playlists[i].needSave())
 		playlists[i].save();
@@ -55,7 +68,7 @@ public class PlaylistHolder {
      * 
      * @see <code>saveAll();</code>
      * */
-    public void forceSaveAll() {
+    public static void forceSaveAll() {
 	for (int i = 0; i < playlists.length; i++)
 	    playlists[i].save();
     }

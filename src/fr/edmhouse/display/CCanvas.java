@@ -454,6 +454,8 @@ public class CCanvas extends Canvas {
 	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
 		    Layout_list.pos_back_y, null);
 	}
+	// Draws the list foreground
+	g.drawImage(Res.list_foreground, 0, 0, null);
 	// prints the buffer to the canvas
 	bs.show();
 	g.dispose();
@@ -652,19 +654,19 @@ public class CCanvas extends Canvas {
 		    .getHeight() * i));
 	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
 		    height, null);
-	    char[] songtitle = SongFolderHolder.folderContent[i].getdipsplayname()
-		    .toCharArray();
+	    char[] songtitle = SongFolderHolder.folderContent[i]
+		    .getdipsplayname().toCharArray();
 	    g.drawChars(songtitle, 0, songtitle.length, Layout_list.pos_text_x,
 		    height + Layout_list.pos_text_y);
 	    if (isMouseOnAddInComponent(i)) {
 		g.drawImage(Res.list_add_active, Layout_list.pos_componnent_x
-			+ Layout_list.pos_add_x, height
-			+ Layout_list.pos_add_y, null);
+			+ Layout_list.pos_add_x,
+			height + Layout_list.pos_add_y, null);
 		temphover = i;
 	    } else
 		g.drawImage(Res.list_add, Layout_list.pos_componnent_x
-			+ Layout_list.pos_add_x, height
-			+ Layout_list.pos_add_y, null);
+			+ Layout_list.pos_add_x,
+			height + Layout_list.pos_add_y, null);
 	}
 	this.hoveredPlaylistAddButtonID = temphover;
 	// Draws the scroll bar
@@ -881,25 +883,24 @@ public class CCanvas extends Canvas {
 			+ Res.list_remove.getWidth(), buttonheight
 			+ Res.list_remove.getHeight()));
     }
-    
+
     /**
-     * Predicates that returns true if the mouse is hovering the add button
-     * in the container n°<code>containerNumber</code> in the playlist
-     * song adder. <code>containerNumber</code> must start at 0.
+     * Predicates that returns true if the mouse is hovering the add button in
+     * the container n°<code>containerNumber</code> in the playlist song adder.
+     * <code>containerNumber</code> must start at 0.
      */
     public boolean isMouseOnAddInComponent(int containerNumber) {
 	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
 		|| this.isonmini() || this.isonrandom() || this.isonskip())
 	    return false;
-	int buttonheight = Layout_list.pos_componnent_y
-		+ Layout_list.pos_add_y
+	int buttonheight = Layout_list.pos_componnent_y + Layout_list.pos_add_y
 		+ (containerNumber * Res.list_componnent.getHeight())
 		- (int) this.listoffset;
 	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
 		+ Layout_list.pos_add_x, buttonheight,
 		Layout_list.pos_componnent_x + Layout_list.pos_add_x
-			+ Res.list_add.getWidth(), buttonheight
-			+ Res.list_add.getHeight()));
+			+ Res.list_add.getWidth(),
+		buttonheight + Res.list_add.getHeight()));
     }
 
     /**

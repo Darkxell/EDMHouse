@@ -13,6 +13,7 @@ import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import fr.edmhouse.audio.AudioList;
 import fr.edmhouse.audio.SoundMeter;
@@ -23,6 +24,7 @@ import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
+import fr.edmhouse.res.SongFolderHolder;
 
 public class CFrame {
 
@@ -151,7 +153,7 @@ public class CFrame {
 		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
 			    .getlength());
 		    EDMHouse.BGM.needjump = true;
-		} else if (canvas.hoveredEditButtonID == 0) {
+		} else if (hoveredID4 == 0) {
 		    // Pretty simple for what it does right? ^^
 		    JFileChooser fileChooser = new JFileChooser() {
 			private static final long serialVersionUID = 1L;
@@ -170,6 +172,12 @@ public class CFrame {
 			File folder = fileChooser.getSelectedFile();
 			EDMHouse.songs = new AudioList(folder.getAbsolutePath());
 		    }
+		} else if (hoveredID4 == 1) {
+		    String name = JOptionPane
+			    .showInputDialog("Enter your playlist name.");
+		    if (name != null)
+			if (name != "")
+			    PlaylistHolder.addNewPlaylist(name);
 		} else if (hoveredID3 >= 2) {
 		    EDMHouse.songs = new AudioList(
 			    PlaylistHolder.playlists[hoveredID3 - 2]);
@@ -181,8 +189,9 @@ public class CFrame {
 		} else if (hoveredID5 > 0) {
 		    PlaylistHolder.playlists[canvas.editingList]
 			    .removeSong(hoveredID5 - 1);
-		} else if (hoveredID6 == 0) {
-		    // TODO
+		} else if (hoveredID6 != -1) {
+		    PlaylistHolder.playlists[canvas.editingList].addSong(SongFolderHolder.folderContent[hoveredID6]);
+		    canvas.content = CCanvas.STATE_PLAYLISTEDITOR;
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
 		} else if (canvas.isonoption_playlists()) {
@@ -304,7 +313,9 @@ public class CFrame {
 	    }
 	    Res.restore();
 	    this.canvas.update(this.canvas.getGraphics());
-	} else 
+	    if (PlaylistHolder.doOneNeedSave())
+		PlaylistHolder.saveAll();
+	} else
 	    shadows.setVisible(false);
     }
 
