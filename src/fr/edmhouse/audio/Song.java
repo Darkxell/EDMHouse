@@ -1,11 +1,9 @@
 package fr.edmhouse.audio;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import fr.edmhouse.main.StringMatcher;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
@@ -20,9 +18,14 @@ public class Song {
     /** the length of the .mp3 file */
     public int length;
 
+    /** Constructs a song object using a <code>File </code> object. */
+    public Song(File mp3){
+	this(mp3.getAbsolutePath());
+    }
+
     /** Constructs a Song object from a .mp3 filepath. */
     public Song(String path) {
-	this.filepath = path;
+	this.filepath = path + "";
 	AudioFileFormat baseFileFormat;
 	try {
 	    baseFileFormat = new MpegAudioFileReader()
@@ -74,10 +77,7 @@ public class Song {
 	    Map properties = baseFileFormat.properties();
 	    long duration = (long) properties.get("duration");
 	    return (int) duration / 1000;
-	} catch (UnsupportedAudioFileException e) {
-	    e.printStackTrace();
-	    return 0;
-	} catch (IOException e) {
+	} catch (Exception e) {
 	    e.printStackTrace();
 	    return 0;
 	}

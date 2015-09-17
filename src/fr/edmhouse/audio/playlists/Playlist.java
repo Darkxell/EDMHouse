@@ -18,7 +18,11 @@ public class Playlist {
     private String name;
     /** the list of songs of the playlist. */
     private Song[] songs;
-    /** is true only if the object has been modified since last saving. */
+    /**
+     * is true only if the object has been modified since last saving. This
+     * means that the phisical Playlist file is unsinced with the actual object
+     * and therefore it needs modifiing.
+     */
     private boolean needSave;
 
     /** Creates an empty playlist with the appropriate name. */
@@ -65,6 +69,19 @@ public class Playlist {
 	temparray[0] = toAdd;
 	this.songs = temparray;
 	this.needSave = true;
+    }
+
+    /**
+     * Removes the wanted song form the playlist.
+     * 
+     * @param songID
+     *            the ID of the song to remove in the array.
+     * */
+    public void removeSong(int songID) {
+	Song[] temparray = new Song[this.songs.length - 1];
+	for (int i = 0; i < temparray.length; i++)
+	    temparray[i] = this.songs[(i < songID) ? i : i + 1];
+	this.songs = temparray;
     }
 
     /** Gets the songs of the playlist object. */

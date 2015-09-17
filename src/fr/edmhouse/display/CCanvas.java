@@ -13,6 +13,7 @@ import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
 import fr.edmhouse.res.ResLayout;
+import fr.edmhouse.res.SongFolderHolder;
 
 public class CCanvas extends Canvas {
     private static final long serialVersionUID = 1L;
@@ -545,30 +546,47 @@ public class CCanvas extends Canvas {
 	g.setFont(Res.font);
 	this.listoffset += EDMHouse.frame.wheelvelocity;
 	int maximumoffset = Layout_list.pos_componnent_y
-		+ (PlaylistHolder.playlists[this.editingList].getSongs().length * Res.list_componnent
+		+ ((PlaylistHolder.playlists[this.editingList].getSongs().length + 1) * Res.list_componnent
 			.getHeight()) - Res.background.getHeight();
 	if (this.listoffset > maximumoffset)
 	    this.listoffset = maximumoffset;
 	if (this.listoffset < 0)
 	    this.listoffset = 0;
 	int temphover = -1;
-	for (int i = 0; i < PlaylistHolder.playlists[this.editingList]
-		.getSongs().length; i++) {
+
+	int uheight = (int) (Layout_list.pos_componnent_y - this.listoffset);
+	g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x, uheight,
+		null);
+	char[] adds = "Add new song".toCharArray();
+	g.drawChars(adds, 0, adds.length, Layout_list.pos_text_x, uheight
+		+ Layout_list.pos_text_y);
+	if (isMouseOnRemoveInComponent(0)) {
+	    g.drawImage(Res.list_add_active, Layout_list.pos_componnent_x
+		    + Layout_list.pos_remove_x, uheight
+		    + Layout_list.pos_remove_y, null);
+	    temphover = 0;
+	} else
+	    g.drawImage(Res.list_add, Layout_list.pos_componnent_x
+		    + Layout_list.pos_remove_x, uheight
+		    + Layout_list.pos_remove_y, null);
+	for (int i = 1; i < PlaylistHolder.playlists[this.editingList]
+		.getSongs().length + 1; i++) {
 	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
 		    .getHeight() * i));
 	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
 		    height, null);
-	    char[] skintitle = PlaylistHolder.playlists[this.editingList]
-		    .getSongs()[i].getdipsplayname().toCharArray();
-	    g.drawChars(skintitle, 0, skintitle.length, Layout_list.pos_text_x,
+	    char[] sgtitle = PlaylistHolder.playlists[this.editingList]
+		    .getSongs()[i - 1].getdipsplayname().toCharArray();
+	    g.drawChars(sgtitle, 0, sgtitle.length, Layout_list.pos_text_x,
 		    height + Layout_list.pos_text_y);
 	    if (isMouseOnRemoveInComponent(i)) {
-		g.drawImage(Res.list_remove_active, Layout_list.pos_remove_x
-			+ Layout_list.pos_remove_x, height
-			+ Layout_list.pos_remove_y, null);
+		g.drawImage(
+			Res.list_remove_active,
+			Layout_list.pos_componnent_x + Layout_list.pos_remove_x,
+			height + Layout_list.pos_remove_y, null);
 		temphover = i;
 	    } else
-		g.drawImage(Res.list_remove, Layout_list.pos_remove_x
+		g.drawImage(Res.list_remove, Layout_list.pos_componnent_x
 			+ Layout_list.pos_remove_x, height
 			+ Layout_list.pos_remove_y, null);
 	}
@@ -612,12 +630,86 @@ public class CCanvas extends Canvas {
     }
 
     private void updateAdder() {
+	BufferStrategy bs = this.getBufferStrategy();
+	Graphics g = bs.getDrawGraphics();
+	g.clearRect(0, 0, this.getWidth(), this.getWidth());
+	// Draws the background
+	g.drawImage(Res.list_background, 0, 0, null);
+	// Draws the componnents
+	g.setColor(Layout_list.color_text);
+	g.setFont(Res.font);
+	this.listoffset += EDMHouse.frame.wheelvelocity;
+	int maximumoffset = Layout_list.pos_componnent_y
+		+ (SongFolderHolder.folderContent.length * Res.list_componnent
+			.getHeight()) - Res.background.getHeight();
+	if (this.listoffset > maximumoffset)
+	    this.listoffset = maximumoffset;
+	if (this.listoffset < 0)
+	    this.listoffset = 0;
+	int temphover = -1;
+	for (int i = 0; i < SongFolderHolder.folderContent.length; i++) {
+	    int height = (int) (Layout_list.pos_componnent_y - this.listoffset + (Res.list_componnent
+		    .getHeight() * i));
+	    g.drawImage(Res.list_componnent, Layout_list.pos_componnent_x,
+		    height, null);
+	    char[] songtitle = SongFolderHolder.folderContent[i].getdipsplayname()
+		    .toCharArray();
+	    g.drawChars(songtitle, 0, songtitle.length, Layout_list.pos_text_x,
+		    height + Layout_list.pos_text_y);
+	    if (isMouseOnAddInComponent(i)) {
+		g.drawImage(Res.list_add_active, Layout_list.pos_componnent_x
+			+ Layout_list.pos_add_x, height
+			+ Layout_list.pos_add_y, null);
+		temphover = i;
+	    } else
+		g.drawImage(Res.list_add, Layout_list.pos_componnent_x
+			+ Layout_list.pos_add_x, height
+			+ Layout_list.pos_add_y, null);
+	}
+	this.hoveredPlaylistAddButtonID = temphover;
+	// Draws the scroll bar
+	int scroll_padding = Layout_list.size_slider_height / 10;
+	int scrollVerticalOffest = (int) (this.listoffset
+		* (Layout_list.size_slider_height - (scroll_padding) * 2) / maximumoffset);
+	g.setColor(Layout_list.color_scroll);
+	g.fillRect(Layout_list.pos_slider_x, Layout_list.pos_slider_y
+		+ scrollVerticalOffest, 10, scroll_padding * 2);
 
+	// Draws the HUD
+	addButtonsToBuffer(g);
+
+	if (Layout_list.value_showvolume == ResLayout.TRUE) {
+	    // Draws the volumebar.
+	    g.drawImage(Res.hud_volume, Layout_common.pos_volume_x,
+		    Layout_common.pos_volume_y, null);
+	    int volpos = (int) (((float) this.volume)
+		    * (Res.hud_volume.getWidth() - (Res.hud_ki.getWidth() / 2) * 2) / 100);
+	    if (this.isonvolume()) {
+		g.drawImage(Res.hud_ki_active, Layout_common.pos_volume_x
+			+ volpos, Layout_common.pos_volume_y, null);
+	    } else {
+		g.drawImage(Res.hud_ki, Layout_common.pos_volume_x + volpos,
+			Layout_common.pos_volume_y, null);
+	    }
+	}
+	// Draws the back button
+	if (this.isonback()) {
+	    g.drawImage(Res.hud_back_active, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	} else {
+	    g.drawImage(Res.hud_back, Layout_list.pos_back_x,
+		    Layout_list.pos_back_y, null);
+	}
+	// Draws the list foreground
+	g.drawImage(Res.list_foreground, 0, 0, null);
+	// prints the buffer to the canvas
+	bs.show();
+	g.dispose();
     }
 
     /**
-     * Takes a pointer to a graphics object and uses it to ptint the main
-     * buttons to the craphic displayable content (most likely a buffer).<br/>
+     * Takes a pointer to a graphics object and uses it to print the main
+     * buttons to the graphic displayable content (most likely a buffer).<br/>
      * The added buttons are conditionnal of the mouse position registered by
      * the canvas and the layouts button positions. THe buttons are : close,
      * options, random, skip, list and minimize.
@@ -788,6 +880,26 @@ public class CCanvas extends Canvas {
 		Layout_list.pos_componnent_x + Layout_list.pos_remove_x
 			+ Res.list_remove.getWidth(), buttonheight
 			+ Res.list_remove.getHeight()));
+    }
+    
+    /**
+     * Predicates that returns true if the mouse is hovering the add button
+     * in the container n°<code>containerNumber</code> in the playlist
+     * song adder. <code>containerNumber</code> must start at 0.
+     */
+    public boolean isMouseOnAddInComponent(int containerNumber) {
+	if (this.isMouseOnScrollbar() || this.isonclose() || this.isonlist()
+		|| this.isonmini() || this.isonrandom() || this.isonskip())
+	    return false;
+	int buttonheight = Layout_list.pos_componnent_y
+		+ Layout_list.pos_add_y
+		+ (containerNumber * Res.list_componnent.getHeight())
+		- (int) this.listoffset;
+	return (EDMHouse.frame.isOnPos(Layout_list.pos_componnent_x
+		+ Layout_list.pos_add_x, buttonheight,
+		Layout_list.pos_componnent_x + Layout_list.pos_add_x
+			+ Res.list_add.getWidth(), buttonheight
+			+ Res.list_add.getHeight()));
     }
 
     /**

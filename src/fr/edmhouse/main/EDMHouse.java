@@ -9,6 +9,7 @@ import fr.edmhouse.res.Layout_common;
 import fr.edmhouse.res.Layout_list;
 import fr.edmhouse.res.Layout_options;
 import fr.edmhouse.res.Res;
+import fr.edmhouse.res.SongFolderHolder;
 
 public class EDMHouse {
 
@@ -27,6 +28,7 @@ public class EDMHouse {
     /** Main method. Called from the .jar scource. */
     @SuppressWarnings("deprecation")
     public static void main(String[] args) {
+	SongFolderHolder.initialize();
 	PlaylistHolder.initialize();
 	Layout_common.initializeFromFile(Res.FOLDER_PATH
 		+ "ressources\\common\\layout.edm");
@@ -47,12 +49,19 @@ public class EDMHouse {
 		.setSystemVolume(((float) Layout_common.value_volumestart) / 100);
 	long launchingTime = System.currentTimeMillis();
 	for (int i = 1;; i++) {
-	    for (; launchingTime + (i * 10) > System.currentTimeMillis();) {
+	    for (; launchingTime + (i * 20) > System.currentTimeMillis();) {
 		try {
-		    Thread.sleep(10);// TODO : reduce fps here... 100 is a "bit"
-				     // too much
+		    Thread.sleep(10);
 		} catch (Exception e) {
-		    e.printStackTrace();
+		}
+		if (System.currentTimeMillis() > launchingTime + (i * 20) + 200) {
+		    launchingTime = System.currentTimeMillis();
+		    i = 1;
+		    System.err
+			    .println("Error on framerate: More than 10 frames behind! \n"
+				    + "Skipped to current frame. This might happen if you"
+				    + " have a CPU overload or if the process has been "
+				    + "frozen for some reason.");
 		}
 	    } // Waits till the next update
 	    frame.update();
@@ -61,7 +70,8 @@ public class EDMHouse {
 
     /**
      * Waits in the current thread for <code>time</code> seconds. Pretty high
-     * CPU usage while running tho.
+     * CPU usage while running tho. Consider using Thread.sleep() instead, but
+     * this doesn't use it.
      */
     public static void wait(float time) {
 	int militime = (int) (time * 1000);

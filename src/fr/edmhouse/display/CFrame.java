@@ -176,6 +176,13 @@ public class CFrame {
 		} else if (hoveredID4 >= 2) {
 		    canvas.editingList = hoveredID4 - 2;
 		    canvas.content = CCanvas.STATE_PLAYLISTEDITOR;
+		} else if (hoveredID5 == 0) {
+		    canvas.content = CCanvas.STATE_PLAYLISTSONGADDER;
+		} else if (hoveredID5 > 0) {
+		    PlaylistHolder.playlists[canvas.editingList]
+			    .removeSong(hoveredID5 - 1);
+		} else if (hoveredID6 == 0) {
+		    // TODO
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
 		} else if (canvas.isonoption_playlists()) {
@@ -297,9 +304,8 @@ public class CFrame {
 	    }
 	    Res.restore();
 	    this.canvas.update(this.canvas.getGraphics());
-	} else {
+	} else 
 	    shadows.setVisible(false);
-	}
     }
 
     /**

@@ -7,7 +7,7 @@ import java.io.FileReader;
 import fr.edmhouse.main.StringMatcher;
 
 public class Layout_list implements ResLayout {
-    
+
     /* List componnents positions */
     public static int pos_componnent_x = 0;
     public static int pos_componnent_y = 0;
@@ -21,6 +21,8 @@ public class Layout_list implements ResLayout {
     public static int pos_swap_y = 0;
     public static int pos_remove_x = 0;
     public static int pos_remove_y = 0;
+    public static int pos_add_x = 0;
+    public static int pos_add_y = 0;
     public static int pos_text_x = 0;
     public static int pos_text_y = 0;
     public static int pos_slider_x = 0;
@@ -35,7 +37,7 @@ public class Layout_list implements ResLayout {
     public static Color color_text = null;
     /* Other values */
     public static int value_showvolume = FALSE;
-    
+
     public static void initializeFromFile(String filepath) {
 	String filestring = "";
 	StringBuilder builder = new StringBuilder();
@@ -85,17 +87,21 @@ public class Layout_list implements ResLayout {
 		pos_swap_x = value;
 	    } else if (array[i].startsWith("pos_swap_y(")) {
 		pos_swap_y = value;
-	    }  else if (array[i].startsWith("pos_remove_x(")) {
+	    } else if (array[i].startsWith("pos_remove_x(")) {
 		pos_remove_x = value;
 	    } else if (array[i].startsWith("pos_remove_y(")) {
 		pos_remove_y = value;
+	    } else if (array[i].startsWith("pos_add_x(")) {
+		pos_add_x = value;
+	    } else if (array[i].startsWith("pos_add_y(")) {
+		pos_add_y = value;
 	    } else if (array[i].startsWith("pos_text_x(")) {
 		pos_text_x = value;
 	    } else if (array[i].startsWith("pos_text_y(")) {
 		pos_text_y = value;
-	    }  else if (array[i].startsWith("pos_back_y(")) {
+	    } else if (array[i].startsWith("pos_back_y(")) {
 		pos_back_y = value;
-	    }  else if (array[i].startsWith("pos_back_x(")) {
+	    } else if (array[i].startsWith("pos_back_x(")) {
 		pos_back_x = value;
 	    } else if (array[i].startsWith("size_textoffset(")) {
 		size_textoffset = value;
@@ -109,7 +115,7 @@ public class Layout_list implements ResLayout {
 		color_b = value;
 	    } else if (array[i].startsWith("color_scroll_alpha(")) {
 		color_a = value;
-	    }else if (array[i].startsWith("color_text_red(")) {
+	    } else if (array[i].startsWith("color_text_red(")) {
 		color_r1 = value;
 	    } else if (array[i].startsWith("color_text_green(")) {
 		color_g1 = value;

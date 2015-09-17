@@ -38,7 +38,12 @@ public class BackgroundMusic implements Runnable {
 	while (true) {
 	    // Tries 10 times a second, not counting lags. Lags are not a big
 	    // deal here, checking for them will just create more.
-	    EDMHouse.wait(0.1f);
+	    // EDMHouse.wait(0.1f);
+	    // Replaced with Thread.sleep for better CPU usage.
+	    try {
+		Thread.sleep(100);
+	    } catch (InterruptedException e1) {
+	    }
 	    try {
 		if (this.currentplayer.isComplete()) {
 		    this.currentplayer.close();

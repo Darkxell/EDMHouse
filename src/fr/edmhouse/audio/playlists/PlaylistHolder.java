@@ -30,6 +30,37 @@ public class PlaylistHolder {
     }
 
     /**
+     * Tests the current playlists to test if one needs to be saved.
+     * 
+     * @return True if one or more of the playlists needs saving, false
+     *         otherwise.
+     * */
+    public boolean doOneNeedSave() {
+	for (int i = 0; i < playlists.length; i++)
+	    if (playlists[i].needSave())
+		return true;
+	return false;
+    }
+
+    /** Saves the playlists that needs saving. */
+    public void saveAll() {
+	for (int i = 0; i < playlists.length; i++)
+	    if (playlists[i].needSave())
+		playlists[i].save();
+    }
+
+    /**
+     * Forces all the contaied playlists to be saved. High CPU usage, use
+     * carefully.
+     * 
+     * @see <code>saveAll();</code>
+     * */
+    public void forceSaveAll() {
+	for (int i = 0; i < playlists.length; i++)
+	    playlists[i].save();
+    }
+
+    /**
      * Creates a text file using the given string.
      * 
      * @author Cubi (I'm lazy.)
@@ -46,7 +77,5 @@ public class PlaylistHolder {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-
     }
-
 }

@@ -7,12 +7,12 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 /**
- * Static class that holds ressources as Java objects for font and images. Make
- * sure to initialize it before using it. Contained data can be flushed to
+ * Abstract class that holds ressources as Java objects for font and images.
+ * Make sure to initialize it before using it. Contained data can be flushed to
  * improve RAM usage when ressources are not needed. Make sure to check if the
  * data is set before using it, otherwise it will be null.
  */
-public class Res {
+public abstract class Res {
 
     /** Path to the main project folder. Should be empty in the final product. */
     public static final String FOLDER_PATH = "C:\\Users\\Darkxell_mc\\Desktop\\EDMhouse\\";
@@ -77,6 +77,8 @@ public class Res {
     public static BufferedImage list_swap_active;
     public static BufferedImage list_remove;
     public static BufferedImage list_remove_active;
+    public static BufferedImage list_add_active;
+    public static BufferedImage list_add;
     public static BufferedImage list_componnent;
     public static BufferedImage list_background;
     public static BufferedImage list_foreground;
@@ -184,6 +186,10 @@ public class Res {
 			+ "list\\remove.png"));
 		list_remove_active = ImageIO.read(new File(currentSkinPath
 			+ "list\\remove_active.png"));
+		list_add = ImageIO.read(new File(currentSkinPath
+			+ "list\\add.png"));
+		list_add_active = ImageIO.read(new File(currentSkinPath
+			+ "list\\add_active.png"));
 		list_componnent = ImageIO.read(new File(currentSkinPath
 			+ "list\\container.png"));
 		list_background = ImageIO.read(new File(currentSkinPath
@@ -208,6 +214,8 @@ public class Res {
 		isInitialized = true;
 	    } catch (Exception e) {
 		e.printStackTrace();
+		System.err.println("Error : Ressources haven't been "
+			+ "sucsessfully loaded into memory.");
 	    }
 	}
     }
@@ -253,6 +261,8 @@ public class Res {
 	list_swap_active = null;
 	list_remove = null;
 	list_remove_active = null;
+	list_add = null;
+	list_add_active = null;
 	list_componnent = null;
 	list_background = null;
 	list_foreground = null;
