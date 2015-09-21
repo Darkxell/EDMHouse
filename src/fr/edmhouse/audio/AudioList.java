@@ -3,6 +3,7 @@ package fr.edmhouse.audio;
 import java.io.File;
 
 import fr.edmhouse.audio.playlists.Playlist;
+import fr.edmhouse.res.SongFolderHolder;
 
 /** An object that holds file objects */
 public class AudioList {
@@ -16,18 +17,13 @@ public class AudioList {
 
     /**
      * Constructs an AudioList object, holding the different mp3 files of the
-     * song folder.
+     * song folder. The audiolist object is builded using the folder path and
+     * only contains the mp3 files.
      */
     public AudioList(String filepath) {
 	this.lastindex = -1;
-	File folder = new File(filepath);
-	File[] content = folder.listFiles();
-	// TODO : filter the real mp3 and the other files here.
-	Song[] s = new Song[content.length];
-	for (int i = 0; i < s.length; i++) {
-	    s[i] = new Song(content[i].getAbsolutePath());
-	}
-	this.songs = s;
+	this.songs = SongFolderHolder
+		.getAudioListFromFolder(new File(filepath));
     }
 
     /** Constructs an <code>Audiolist</code> object using a playlist. */

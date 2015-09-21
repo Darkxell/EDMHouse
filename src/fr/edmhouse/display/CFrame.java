@@ -34,6 +34,8 @@ public class CFrame {
      * rolled. Can be negative.
      */
     public double wheelvelocity;
+    /** Is true if you are currently dragging the progress bar. */
+    private boolean isDraggingProgress;
     /** Is true if the mouse is inside the frame. */
     private boolean isMouseInside;
     /**
@@ -149,10 +151,16 @@ public class CFrame {
 			    Res.background.getHeight() + 20);
 		    frame.setIconImage(Res.icon);
 		} else if (canvas.isonprogress()) {
-		    int mouseXonBar = ix - Layout_common.pos_progress_x;
-		    canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
-			    .getlength());
-		    EDMHouse.BGM.needjump = true;
+		    if (isDraggingProgress) {
+			isDraggingProgress = false;
+			EDMHouse.BGM.needjump = true;
+		    } else {
+			int mouseXonBar = ix - Layout_common.pos_progress_x;
+			canvas.progression = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
+				.getlength());
+			EDMHouse.BGM.needjump = true;
+		    }
+
 		} else if (hoveredID4 == 0) {
 		    // Pretty simple for what it does right? ^^
 		    JFileChooser fileChooser = new JFileChooser() {
@@ -176,7 +184,7 @@ public class CFrame {
 		    String name = JOptionPane
 			    .showInputDialog("Enter your playlist name.");
 		    if (name != null)
-			if (name != "")
+			if (!name.isEmpty())
 			    PlaylistHolder.addNewPlaylist(name);
 		} else if (hoveredID3 >= 2) {
 		    EDMHouse.songs = new AudioList(
@@ -190,7 +198,8 @@ public class CFrame {
 		    PlaylistHolder.playlists[canvas.editingList]
 			    .removeSong(hoveredID5 - 1);
 		} else if (hoveredID6 != -1) {
-		    PlaylistHolder.playlists[canvas.editingList].addSong(SongFolderHolder.folderContent[hoveredID6]);
+		    PlaylistHolder.playlists[canvas.editingList]
+			    .addSong(SongFolderHolder.folderContent[hoveredID6]);
 		    canvas.content = CCanvas.STATE_PLAYLISTEDITOR;
 		} else if (canvas.isonoption_skin()) {
 		    canvas.content = CCanvas.STATE_SKINS;
@@ -208,6 +217,10 @@ public class CFrame {
 	    @Override
 	    public void mouseExited(MouseEvent e) {
 		isMouseInside = false;
+		if (isDraggingProgress) {
+		    isDraggingProgress = false;
+		    EDMHouse.BGM.needjump = true;
+		}
 	    }
 
 	    @Override
@@ -228,7 +241,17 @@ public class CFrame {
 
 	    @Override
 	    public void mouseDragged(MouseEvent e) {
-		if (canvas.isMouseOnScrollbar()) {
+		if (canvas.isonprogress() && !canvas.isonbutton()) {
+		    int mouseXonBar = e.getX() - Layout_common.pos_progress_x;
+		    int newprogress = (int) ((((float) mouseXonBar) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
+			    .getlength());
+		    int maxprogress = (int) ((((float) Layout_common.size_progress_width) / ((float) Layout_common.size_progress_width)) * EDMHouse.BGM
+			    .getlength());
+		    canvas.progression = (newprogress < 0) ? 0
+			    : ((newprogress > maxprogress) ? maxprogress
+				    : newprogress);
+		    isDraggingProgress = true;
+		} else if (canvas.isMouseOnScrollbar()) {
 		    double mouseYOnBar = e.getY()
 			    - (Layout_list.pos_slider_y + (Layout_list.size_slider_height / 10));
 		    double maximumListOffset = 0;

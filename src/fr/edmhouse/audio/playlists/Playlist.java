@@ -47,11 +47,15 @@ public class Playlist {
 	}
 	filestring = builder.toString();
 	filestring = filestring.toLowerCase();
-	String[] array = filestring.split("\"");
-	Song[] tempsongs = new Song[array.length];
-	for (int i = 0; i < tempsongs.length; i++)
-	    tempsongs[i] = new Song(array[i]);
-	this.songs = tempsongs;
+	if (filestring == null || filestring.isEmpty())
+	    this.songs = new Song[0];
+	else {
+	    String[] array = filestring.split("\"");
+	    Song[] tempsongs = new Song[array.length];
+	    for (int i = 0; i < tempsongs.length; i++)
+		tempsongs[i] = new Song(array[i]);
+	    this.songs = tempsongs;
+	}
 	this.name = StringMatcher.getRawFilename(playlist.getName());
 	this.needSave = false;
     }
