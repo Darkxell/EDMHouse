@@ -72,6 +72,7 @@ public class EDMHouse {
      * Waits in the current thread for <code>time</code> seconds. Pretty high
      * CPU usage while running tho. Consider using Thread.sleep() instead, but
      * this doesn't use it.
+     * @deprecated Very high CPU usage.
      */
     public static void wait(float time) {
 	int militime = (int) (time * 1000);

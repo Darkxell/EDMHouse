@@ -16,7 +16,7 @@ public abstract class Res {
 
     /** Path to the main project folder. Should be empty in the final product. */
     public static final String FOLDER_PATH = "C:\\Users\\Darkxell_mc\\Desktop\\EDMhouse\\";
-    // public static final String FOLDER_PATH = "";
+    //public static final String FOLDER_PATH = "";
     // TODO : switch this when relasing.
 
     /**

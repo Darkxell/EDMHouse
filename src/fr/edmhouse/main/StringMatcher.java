@@ -39,9 +39,8 @@ public class StringMatcher {
 		    if (matcher[i] == totest[j]) {
 			i++;
 			j++;
-		    } else {
+		    } else 
 			return false;
-		    }
 		    break;
 		}
 	    }

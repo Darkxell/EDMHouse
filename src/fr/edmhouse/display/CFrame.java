@@ -328,7 +328,7 @@ public class CFrame {
 	// TODO : change the wheelvelocity decreasement to something fixed in
 	// time? or perhaps make it customisable in the layout.edm file?
 	if (!this.canvas.state)
-	    this.canvas.progression += 10;
+	    this.canvas.progression += 20;
 	if (this.isVisible()) {
 	    if (!this.shadows.isVisible()) {
 		shadows.setVisible(true);
