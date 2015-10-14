@@ -401,16 +401,19 @@ public class CCanvas extends Canvas {
 		    .toCharArray();
 	    g.drawChars(listtitle, 0, listtitle.length, Layout_list.pos_text_x,
 		    height + Layout_list.pos_text_y);
-	    if (isMouseOnSelectInComponent(i)) {
+	    if(!PlaylistHolder.playlists[i - 2].isEmpty()){
+		if (isMouseOnSelectInComponent(i)) {
 		g.drawImage(
 			Res.list_select_active,
 			Layout_list.pos_componnent_x + Layout_list.pos_select_x,
 			height + Layout_list.pos_select_y, null);
 		temphover = i;
-	    } else
+	    } else{
 		g.drawImage(Res.list_select, Layout_list.pos_componnent_x
 			+ Layout_list.pos_select_x, height
 			+ Layout_list.pos_select_y, null);
+	    }
+	    }
 	    if (isMouseOnEditInComponent(i)) {
 		g.drawImage(Res.list_edit_active, Layout_list.pos_componnent_x
 			+ Layout_list.pos_edit_x, height

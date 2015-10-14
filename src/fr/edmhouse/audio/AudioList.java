@@ -34,12 +34,16 @@ public class AudioList {
 
     /**
      * Gets a random mp3 file url from the list. Can't return the last picked
-     * song from the list. Will crash if there is only one song, obviously.
+     * song from the list. Will return the last picked song if it's the only one
+     * in the list.
      */
     public Song getRandomUrl() {
 	int rand = (int) (Math.random() * this.songs.length);
-	while (rand == this.lastindex)
+	int max = 0;
+	while (rand == this.lastindex && max < 20) {
 	    rand = (int) (Math.random() * this.songs.length);
+	    ++max;
+	}
 	this.lastindex = rand;
 	return this.songs[rand];
     }

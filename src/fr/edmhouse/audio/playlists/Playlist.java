@@ -93,6 +93,11 @@ public class Playlist {
 	return this.songs;
     }
 
+    /** Predicate that returns true if and only if the playlist is empty. */
+    public boolean isEmpty() {
+	return this.songs.length == 0;
+    }
+
     /** Gets the name of the playlist */
     public String getname() {
 	return this.name;
